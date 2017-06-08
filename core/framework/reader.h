@@ -9,7 +9,7 @@
 
 namespace framework {
 
-const int readerBufSize = 100;
+const int readerBufSize = 12 * 100;
 
 class ReaderInterface {
 public:
