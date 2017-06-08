@@ -82,8 +82,8 @@ private:
 } // example
 
 int main() {
-  std::string filePath= "fsdfds";
-  platform::ll vNum = 2, eNum = 1;
+  std::string filePath= "/home/mlx/infomall_link_graph.bin.sorted";
+  platform::ll vNum = 3832209324L, eNum = 270497304397L;
   int iteration = 2;
   runtime::RunnerInterface* runner = new runtime::SimpleRunner<example::pagerank::Message, example::pagerank::Edge, example::pagerank::Vertex>(vNum, eNum, filePath);
   runner->run(iteration);
