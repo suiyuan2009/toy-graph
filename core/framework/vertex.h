@@ -1,14 +1,15 @@
 #ifndef CORE_FRAMEWORK_VERTEX_H
 #define CORE_FRAMEWORK_VERTEX_H
 
-#include "core/platform/types.h"
+#include "core/framework/message.h"
 
 namespace framework {
 
 class VertexInterface {
 public:
-  VertexInterface(platform::ll idx);
-  virtual void gather() = 0;
+  virtual void update() = 0;
+  virtual void gather(MessageInterface* msg) = 0;
+  virtual void get(MessageInterface* msg) = 0;
 };
 
 }

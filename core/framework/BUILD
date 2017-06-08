@@ -1,11 +1,31 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+  name = "framework",
+  deps = ["edge",
+          "vertex",
+          "reader",
+          "graph",
+          "graph_builder",
+          "message",
+          ],
+)
+
+cc_library(
+  name = "message",
+  hdrs = ["message.h"],
+)
+
 cc_library(
   name = "edge",
-  hdrs = ["edge.h"]
+  hdrs = ["edge.h"],
+  deps = [":graph"],
 )
 
 cc_library(
   name = "vertex",
   hdrs = ["vertex.h"],
+  deps = [":message"],
 )
 
 cc_library(

@@ -1,10 +1,12 @@
+#include <string>
+
 #include "core/framework/reader.h"
 #include "core/platform/malloc.h"
 
 namespace framework {
 
-SimpleReader::SimpleReader(platform::FileInterface* f) {
-  file = f;
+SimpleReader::SimpleReader(std::string filePath) {
+  file = new platform::PosixFile(filePath);
   offset = readerBufSize;
   bufSize = 0;
   buf = (char*)platform::Malloc(readerBufSize);

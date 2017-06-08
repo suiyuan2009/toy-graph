@@ -11,7 +11,7 @@ namespace framework {
 
 class GraphInterface {
 public:
-  virtual bool getVertex(platform::ll idx, VertexInterface& v) = 0;
+  virtual bool getVertex(platform::ll idx, VertexInterface* v) = 0;
   virtual ~GraphInterface() = 0;
 };
 
@@ -22,7 +22,7 @@ public:
   SimpleGraph(const SimpleGraph& sg) = delete;
   SimpleGraph& operator=(const SimpleGraph& sg) = delete;
   ~SimpleGraph() override;
-  bool getVertex(platform::ll idx, VertexInterface& v) override;
+  bool getVertex(platform::ll idx, VertexInterface* v) override;
 private:
   int vertexNum;
   std::vector<VertexInterface*> vertexes;

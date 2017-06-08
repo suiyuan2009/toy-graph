@@ -15,11 +15,11 @@ SimpleGraph::~SimpleGraph() {
   vertexes.clear();
 }
 
-bool SimpleGraph::getVertex(platform::ll idx, VertexInterface& v) {
+bool SimpleGraph::getVertex(platform::ll idx, VertexInterface* v) {
   if (idx >= vertexNum) {
     return false;
   }
-  v = *vertexes[idx];
+  v = vertexes[idx];
   return true;
 }
 

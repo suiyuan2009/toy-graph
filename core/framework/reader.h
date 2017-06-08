@@ -2,6 +2,8 @@
 #define CORE_FRAMEWORK_READER_H
 
 #include <queue>
+#include <string>
+
 #include "core/framework/edge.h"
 #include "core/platform/file.h"
 
@@ -21,7 +23,7 @@ public:
   ~SimpleReader() override;
   SimpleReader(const SimpleReader& r) = delete;
   SimpleReader& operator=(const SimpleReader& r) = delete;
-  SimpleReader(platform::FileInterface* f);
+  SimpleReader(std::string filePath);
   bool get(EdgeInterface& edge) override;
 private:
   platform::FileInterface* file;

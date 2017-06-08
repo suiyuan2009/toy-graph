@@ -1,4 +1,4 @@
-package(default_visibility = ["//core:__subpackages__"])
+package(default_visibility = ["//visibility:public"])
 
 cc_library(
   name = "malloc",
