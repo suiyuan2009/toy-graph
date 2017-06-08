@@ -14,7 +14,7 @@ public:
   virtual void updateAllVertex() = 0;
   virtual void updateOneVertex(platform::int64 idx) = 0;
   virtual void initOneVertex(platform::int64 idx) = 0;
-  virtual ~GraphInterface() {};
+  virtual ~GraphInterface();
 protected:
   platform::int64 vertexNum, edgeNum, vertexBufSize;
   void* vertexBuf;

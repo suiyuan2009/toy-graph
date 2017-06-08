@@ -13,6 +13,10 @@ GraphInterface::GraphInterface(platform::int64 vNum, platform::int64 eNum) {
   vertexBuf = platform::Malloc(vertexBufSize);
 }
 
+GraphInterface::~GraphInterface() {
+  platform::Free(vertexBuf);
+}
+
 SimpleGraph::SimpleGraph(platform::int64 vNum, platform::int64 eNum):
     GraphInterface(vNum, eNum) {
 }
@@ -22,7 +26,6 @@ void SimpleGraph::setVertex(VertexInterface* v) {
 }
 
 SimpleGraph::~SimpleGraph() {
-  platform::Free(vertexBuf);
   platform::Free(vertex);
 }
 
