@@ -10,6 +10,7 @@ public:
   virtual void update() = 0;
   virtual void gather(MessageInterface* msg) = 0;
   virtual void get(MessageInterface* msg) = 0;
+  virtual ~VertexInterface() {}
 };
 
 }

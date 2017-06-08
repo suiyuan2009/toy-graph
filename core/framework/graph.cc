@@ -31,6 +31,11 @@ void SimpleGraph::updateVertex(VertexInterface* v) {
   v->update();
 }
 
+void SimpleGraph::initVertex(platform::ll idx, VertexInterface* v) {
+  delete(vertexes[idx]);
+  vertexes[idx] = v;
+}
+
 void SimpleGraph::update() {
   for (int i = 0; i < vertexNum; i++) {
     updateVertex(vertexes[i]);

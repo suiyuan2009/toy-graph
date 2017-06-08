@@ -1,3 +1,5 @@
+#include <string>
+
 #include "core/framework/edge.h"
 #include "core/framework/graph.h"
 #include "core/framework/graph_builder.h"
@@ -5,6 +7,7 @@
 #include "core/framework/reader.h"
 #include "core/framework/vertex.h"
 #include "core/platform/types.h"
+#include "core/runtime/runner.h"
 
 namespace example {
 namespace pagerank {
@@ -79,5 +82,10 @@ private:
 } // example
 
 int main() {
+  std::string filePath= "fsdfds";
+  platform::ll vNum = 2, eNum = 1;
+  int iteration = 2;
+  runtime::RunnerInterface* runner = new runtime::SimpleRunner<example::pagerank::Message, example::pagerank::Edge, example::pagerank::Vertex>(vNum, eNum, filePath);
+  runner->run(iteration);
   return 0;
 }

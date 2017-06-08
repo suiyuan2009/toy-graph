@@ -41,9 +41,7 @@ cc_library(
 
 cc_library(
   name = "graph",
-  hdrs = ["graph.h",
-          "graph_builder.h"
-          ],
+  hdrs = ["graph.h"],
   srcs = ["graph.cc"],
   deps = ["//core/platform:types",
           ":vertex"],
@@ -52,6 +50,5 @@ cc_library(
 cc_library(
   name = "graph_builder",
   hdrs = ["graph_builder.h"],
-  srcs = ["graph_builder.cc"],
   deps = [":graph"],
 )

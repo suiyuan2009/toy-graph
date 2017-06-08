@@ -3,20 +3,18 @@
 
 #include <vector>
 
-#include "core/framework/graph_builder.h"
 #include "core/framework/vertex.h"
 #include "core/platform/types.h"
 
 namespace framework {
 
 class GraphInterface {
-friend class GraphBuilderInterface;
 public:
   GraphInterface(platform::ll vNum, platform::ll eNum);
   virtual bool getVertex(platform::ll idx, VertexInterface* v) = 0;
   virtual void updateVertex(VertexInterface* v) = 0;
   virtual void update() = 0;
-  virtual ~GraphInterface() = 0;
+  virtual ~GraphInterface() {};
 protected:
   platform::ll vertexNum, edgeNum;
 };
@@ -31,9 +29,12 @@ public:
   bool getVertex(platform::ll idx, VertexInterface* v) override;
   void updateVertex(VertexInterface* v) override;
   void update() override;
+  void initVertex(platform::ll idx, VertexInterface* v);
 private:
   std::vector<VertexInterface*> vertexes;
 };
+
+
 
 }
 #endif

@@ -14,7 +14,7 @@ const int readerBufSize = 100;
 class ReaderInterface {
 public:
   virtual bool get(EdgeInterface* edge) = 0;
-  virtual ~ReaderInterface() = 0;
+  virtual ~ReaderInterface() {};
 };
 
 class SimpleReader : public ReaderInterface {
