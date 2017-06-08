@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "core/framework/message.h"
 #include "core/framework/vertex.h"
 #include "core/platform/types.h"
 
@@ -14,6 +15,8 @@ public:
   virtual void updateAllVertex() = 0;
   virtual void updateOneVertex(platform::int64 idx) = 0;
   virtual void initOneVertex(platform::int64 idx) = 0;
+  virtual void getVertexInfo(platform::int64 idx, MessageInterface* msg) = 0;
+  virtual void scatter(platform::int64 idx, MessageInterface* msg) = 0;
   virtual ~GraphInterface();
 protected:
   platform::int64 vertexNum, edgeNum, vertexBufSize;
@@ -30,6 +33,8 @@ public:
   void updateOneVertex(platform::int64 idx) override;
   void updateAllVertex() override;
   void initOneVertex(platform::int64 idx) override;
+  void getVertexInfo(platform::int64 idx, MessageInterface* msg) override;
+  void scatter(platform::int64 idx, MessageInterface* msg) override;
   void setVertex(VertexInterface* v);
 private:
   VertexInterface* vertex;

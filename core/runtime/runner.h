@@ -60,6 +60,9 @@ void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
     while (reader->get(edge)) {
       edgeNumDEBUG++;
       edge->scatter(graph, msg);
+      if (!(edgeNumDEBUG & (65535))) {
+        std::cout<<"process "<<edgeNumDEBUG<<" edges"<< std::endl;
+      }
     }
     std::cout<<"iterate "<<edgeNumDEBUG<<" edges."<<std::endl;
     delete(edge);

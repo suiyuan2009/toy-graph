@@ -1,5 +1,5 @@
+#include <iostream>
 #include <string>
-
 #include "core/framework/edge.h"
 #include "core/framework/graph.h"
 #include "core/framework/graph_builder.h"
@@ -24,20 +24,16 @@ public:
       offset = size;
       return false;
     }
-    src_idx = (buf[offset]<<24)|(buf[offset+1]<<16)
-              |(buf[offset+2]<<8)|(buf[offset+3]);
-    offset += 4;
-    dst_idx = (buf[offset]<<24)|(buf[offset+1]<<16)
-              |(buf[offset+2]<<8)|(buf[offset+3]);
-    offset += 4;
-    src_degree = (buf[offset]<<24)|(buf[offset+1]<<16)
-              |(buf[offset+2]<<8)|(buf[offset+3]);
-    offset += 4;
+    std::cout<<src_idx<<" "<<dst_idx<<" "<<src_degree<<std::endl;
     return true;
   }
 
   void scatter(framework::GraphInterface* g,
       framework::MessageInterface* msg) override {
+    g->getVertexInfo(src_idx, msg);
+    Message* tmp = (Message*)msg;
+    tmp->msg = tmp->msg * 1.0 / src_degree;
+    g->scatter(dst_idx, tmp);
   }
 private:
   platform::int64 src_idx, dst_idx, src_degree;
@@ -58,6 +54,7 @@ public:
       framework::MessageInterface* message) override {
   }
   void initOneVertex(char* buf, platform::int64 offset) {
+
   }
 };
 

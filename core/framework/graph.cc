@@ -1,6 +1,7 @@
 #include <vector>
 
 #include "core/framework/graph.h"
+#include "core/framework/message.h"
 #include "core/framework/vertex.h"
 #include "core/platform/malloc.h"
 #include "core/platform/types.h"
@@ -29,12 +30,20 @@ SimpleGraph::~SimpleGraph() {
   platform::Free(vertex);
 }
 
+void SimpleGraph::scatter(platform::int64 idx, MessageInterface* msg) {
+  vertex->gather((char*)vertexBuf, idx * oneVertexSize, msg);
+}
+
 void SimpleGraph::updateOneVertex(platform::int64 idx) {
   vertex->update((char*)vertexBuf, idx * oneVertexSize);
 }
 
 void SimpleGraph::initOneVertex(platform::int64 idx) {
   vertex->initOneVertex((char*)vertexBuf, idx * oneVertexSize);
+}
+
+void SimpleGraph::getVertexInfo(platform::int64 idx, MessageInterface* msg) {
+  vertex->get((char*)vertexBuf, idx * oneVertexSize, msg);
 }
 
 void SimpleGraph::updateAllVertex() {
