@@ -10,6 +10,7 @@ class EdgeInterface {
 public:
   virtual bool read(char* buf, int size, int& offset) = 0;
   virtual void scatter(GraphInterface* g, MessageInterface* msg) = 0;
+  virtual ~EdgeInterface() {}
 };
 
 }

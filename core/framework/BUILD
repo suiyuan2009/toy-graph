@@ -44,7 +44,8 @@ cc_library(
   hdrs = ["graph.h"],
   srcs = ["graph.cc"],
   deps = ["//core/platform:types",
-          ":vertex"],
+          ":vertex",
+          "//core/platform:malloc"],
 )
 
 cc_library(

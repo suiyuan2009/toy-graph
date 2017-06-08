@@ -5,6 +5,7 @@
 #include <string>
 
 #include "core/framework/graph.h"
+#include "core/framework/graph_builder.h"
 #include "core/framework/reader.h"
 #include "core/platform/types.h"
 
@@ -51,14 +52,20 @@ template <class MessageT, class EdgeT, class VertexT>
 void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
   for (int i = 1; i <= iteration; i++) {
     delete(reader);
-    std::cout<<"iteration: "<<i<<std::endl;
+    std::cout<<"start iteration: "<<i<<std::endl;
     reader = new framework::SimpleReader(file);
-    framework::EdgeInterface* tmp = new EdgeT();
+    framework::EdgeInterface* edge = new EdgeT();
     framework::MessageInterface* msg = new MessageT();
-    while (reader->get(tmp)) {
-      tmp->scatter(graph, msg);
+    platform::int64 edgeNumDEBUG = 0;
+    while (reader->get(edge)) {
+      edgeNumDEBUG++;
+      edge->scatter(graph, msg);
     }
-    graph->update();
+    std::cout<<"iterate "<<edgeNumDEBUG<<" edges."<<std::endl;
+    delete(edge);
+    delete(msg);
+    graph->updateAllVertex();
+    std::cout<<"finish iteration: "<<i<<std::endl;
   }
 };
 

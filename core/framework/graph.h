@@ -11,12 +11,13 @@ namespace framework {
 class GraphInterface {
 public:
   GraphInterface(platform::int64 vNum, platform::int64 eNum);
-  virtual bool getVertex(platform::int64 idx, VertexInterface* v) = 0;
-  virtual void updateVertex(VertexInterface* v) = 0;
-  virtual void update() = 0;
+  virtual void updateAllVertex() = 0;
+  virtual void updateOneVertex(platform::int64 idx) = 0;
+  virtual void initOneVertex(platform::int64 idx) = 0;
   virtual ~GraphInterface() {};
 protected:
-  platform::int64 vertexNum, edgeNum;
+  platform::int64 vertexNum, edgeNum, vertexBufSize;
+  void* vertexBuf;
 };
 
 class SimpleGraph : public GraphInterface {
@@ -26,12 +27,12 @@ public:
   SimpleGraph(const SimpleGraph& sg) = delete;
   SimpleGraph& operator=(const SimpleGraph& sg) = delete;
   ~SimpleGraph() override;
-  bool getVertex(platform::int64 idx, VertexInterface* v) override;
-  void updateVertex(VertexInterface* v) override;
-  void update() override;
-  void initVertex(platform::int64 idx, VertexInterface* v);
+  void updateOneVertex(platform::int64 idx) override;
+  void updateAllVertex() override;
+  void initOneVertex(platform::int64 idx) override;
+  void setVertex(VertexInterface* v);
 private:
-  std::vector<VertexInterface*> vertexes;
+  VertexInterface* vertex;
 };
 
 

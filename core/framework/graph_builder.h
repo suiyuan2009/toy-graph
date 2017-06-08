@@ -18,18 +18,21 @@ public:
 template <class VertexT>
 class SimpleGraphBuilder : public GraphBuilderInterface {
 public:
-  GraphInterface* build(platform::int64 vertexNum, platform::int64 edgeNum) override;
+  GraphInterface* build(platform::int64 vertexNum,
+      platform::int64 edgeNum) override;
 };
 
 template <class VertexT>
 GraphInterface* SimpleGraphBuilder<VertexT>::build(platform::int64 vertexNum,
     platform::int64 edgeNum) {
   SimpleGraph* simpleGraph = new SimpleGraph(vertexNum, edgeNum);
-  std::cout<<"finish vector init, start init every vertex, vertex size is "<<
-    sizeof(VertexT)<<std::endl;
+  VertexInterface* vertex = new VertexT();
+  simpleGraph->setVertex(vertex);
+  std::cout<<"start init every vertex."<<std::endl;
   for (platform::int64 i = 0; i < vertexNum; i++) {
-    simpleGraph->initVertex(i,  new VertexT());
+    simpleGraph->initOneVertex(i);
   }
+  std::cout<<"finish init every vertex."<<std::endl;
   return simpleGraph;
 }
 

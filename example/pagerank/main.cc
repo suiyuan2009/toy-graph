@@ -38,14 +38,6 @@ public:
 
   void scatter(framework::GraphInterface* g,
       framework::MessageInterface* msg) override {
-    framework::VertexInterface* src = nullptr;
-    framework::VertexInterface* dst = nullptr;
-    g->getVertex(src_idx, src);
-    g->getVertex(dst_idx, dst);
-    src->get(msg);
-    Message* sendMsg = static_cast<Message*>(msg);
-    sendMsg->msg = sendMsg->msg * 1.0 / src_degree;
-    dst->gather(sendMsg);
   }
 private:
   platform::int64 src_idx, dst_idx, src_degree;
@@ -53,28 +45,20 @@ private:
 
 class Vertex : public framework::VertexInterface {
 public:
-  Vertex() {
-    value = 1.0;
-    msg = 0.0;
+  Vertex() {}
+
+  void update(char* buf, platform::int64 offset) override {
   }
 
-  void update() override {
-    value = msg;
-    msg = 0.0;
+  void get(char* buf, platform::int64 offset,
+      framework::MessageInterface* msg) override {
   }
 
-  void get(framework::MessageInterface* msg) override {
-    Message* m = static_cast<Message*>(msg);
-    m->msg = value;
+  void gather(char*buf, platform::int64 offset,
+      framework::MessageInterface* message) override {
   }
-
-  void gather(framework::MessageInterface* message) override {
-    Message* m = static_cast<Message*>(message);
-    msg += m->msg;
+  void initOneVertex(char* buf, platform::int64 offset) {
   }
-
-private:
-  platform::float32 value, msg;
 };
 
 } // pagerank

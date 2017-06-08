@@ -2,43 +2,41 @@
 
 #include "core/framework/graph.h"
 #include "core/framework/vertex.h"
+#include "core/platform/malloc.h"
 #include "core/platform/types.h"
 
 namespace framework {
 
 GraphInterface::GraphInterface(platform::int64 vNum, platform::int64 eNum) {
   vertexNum = vNum, edgeNum = eNum;
+  vertexBufSize = framework::oneVertexSize * vNum;
+  vertexBuf = platform::Malloc(vertexBufSize);
 }
 
 SimpleGraph::SimpleGraph(platform::int64 vNum, platform::int64 eNum):
     GraphInterface(vNum, eNum) {
- vertexes = std::vector<VertexInterface*>(vNum);
+}
+
+void SimpleGraph::setVertex(VertexInterface* v) {
+  vertex = v;
 }
 
 SimpleGraph::~SimpleGraph() {
-  vertexes.clear();
+  platform::Free(vertexBuf);
+  platform::Free(vertex);
 }
 
-bool SimpleGraph::getVertex(platform::int64 idx, VertexInterface* v) {
-  if (idx >= vertexNum) {
-    return false;
-  }
-  v = vertexes[idx];
-  return true;
+void SimpleGraph::updateOneVertex(platform::int64 idx) {
+  vertex->update((char*)vertexBuf, idx * oneVertexSize);
 }
 
-void SimpleGraph::updateVertex(VertexInterface* v) {
-  v->update();
+void SimpleGraph::initOneVertex(platform::int64 idx) {
+  vertex->initOneVertex((char*)vertexBuf, idx * oneVertexSize);
 }
 
-void SimpleGraph::initVertex(platform::int64 idx, VertexInterface* v) {
-  delete(vertexes[idx]);
-  vertexes[idx] = v;
-}
-
-void SimpleGraph::update() {
-  for (int i = 0; i < vertexNum; i++) {
-    updateVertex(vertexes[i]);
+void SimpleGraph::updateAllVertex() {
+  for (platform::int64 i = 0; i < vertexNum; i++) {
+    updateOneVertex(i);
   }
 }
 
