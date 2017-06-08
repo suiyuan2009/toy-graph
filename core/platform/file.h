@@ -1,3 +1,5 @@
+#ifndef CORE_PLATFORM_FILE_H
+#define CORE_PLATFORM_FILE_H
 #include <string>
 
 namespace platform {
@@ -22,3 +24,4 @@ private:
 };
 
 }
+#endif

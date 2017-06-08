@@ -1,3 +1,5 @@
+#ifndef CORE_FRAMEWORK_READER_H
+#define CORE_FRAMEWORK_READER_H
 
 #include <queue>
 #include "core/framework/edge.h"
@@ -28,3 +30,4 @@ private:
 };
 
 }
+#endif

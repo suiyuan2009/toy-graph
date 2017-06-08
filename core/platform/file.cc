@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 #include "core/platform/file.h"
-#include "core/platform/malloc.cc"
+#include "core/platform/malloc.h"
 
 namespace platform {
 

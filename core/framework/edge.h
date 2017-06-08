@@ -1,3 +1,6 @@
+#ifndef CORE_FRAMEWORK_EDGE_H
+#define CORE_FRAMEWORK_EDGE_H
+
 #include "core/framework/vertex.h"
 
 namespace framework {
@@ -10,3 +13,4 @@ public:
 };
 
 }
+#endif

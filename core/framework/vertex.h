@@ -1,3 +1,6 @@
+#ifndef CORE_FRAMEWORK_VERTEX_H
+#define CORE_FRAMEWORK_VERTEX_H
+
 #include "core/platform/types.h"
 
 namespace framework {
@@ -9,3 +12,4 @@ public:
 };
 
 }
+#endif

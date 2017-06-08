@@ -1,5 +1,5 @@
 #include "core/framework/reader.h"
-#include "core/platform/malloc.cc"
+#include "core/platform/malloc.h"
 
 namespace framework {
 

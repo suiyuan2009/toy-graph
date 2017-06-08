@@ -1,3 +1,5 @@
+#ifndef CORE_PLATFORM_MALLOC_H
+#define CORE_PLATFORM_MALLOC_H
 #include <stdlib.h>
 
 namespace platform {
@@ -11,3 +13,4 @@ void Free(void* buffer) {
 }
 
 }
+#endif

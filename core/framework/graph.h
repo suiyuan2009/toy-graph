@@ -1,3 +1,6 @@
+#ifndef CORE_FRAMEWORK_GRAPH_H
+#define CORE_FRAMEWORK_GRAPH_H
+
 #include <vector>
 
 #include "core/framework/graph_builder.h"
@@ -27,3 +30,4 @@ friend class GraphBuilderInterface;
 };
 
 }
+#endif
