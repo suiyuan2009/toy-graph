@@ -8,23 +8,23 @@ namespace framework {
 
 class GraphBuilderInterface {
 public:
-  virtual GraphInterface* build(platform::ll vertexNum,
-      platform::ll edgeNum) = 0;
+  virtual GraphInterface* build(platform::int64 vertexNum,
+      platform::int64 edgeNum) = 0;
   virtual ~GraphBuilderInterface() {}
 };
 
 template <class VertexT>
 class SimpleGraphBuilder : public GraphBuilderInterface {
 public:
-  GraphInterface* build(platform::ll vertexNum, platform::ll edgeNum) override;
+  GraphInterface* build(platform::int64 vertexNum, platform::int64 edgeNum) override;
 };
 
 template <class VertexT>
-GraphInterface* SimpleGraphBuilder<VertexT>::build(platform::ll vertexNum,
-    platform::ll edgeNum) {
+GraphInterface* SimpleGraphBuilder<VertexT>::build(platform::int64 vertexNum,
+    platform::int64 edgeNum) {
   SimpleGraph* simpleGraph = new SimpleGraph(vertexNum, edgeNum);
-  for (platform::ll i = 0; i < vertexNum; i++) {
-    simpleGraph->initVertex(i,  new VertexT(i));
+  for (platform::int64 i = 0; i < vertexNum; i++) {
+    simpleGraph->initVertex(i,  new VertexT());
   }
   return simpleGraph;
 }

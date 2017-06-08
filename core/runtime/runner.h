@@ -1,6 +1,7 @@
 #ifndef CORE_RUNTIME_RUNNER_H
 #define CORE_RUNTIME_RUNNER_H
 
+#include <iostream>
 #include <string>
 
 #include "core/framework/graph.h"
@@ -23,7 +24,7 @@ template <class MessageT, class EdgeT, class VertexT>
 class SimpleRunner : public RunnerInterface {
 public:
   void run(int iteration);
-  SimpleRunner(platform::ll vertexNum, platform::ll edgeNum,
+  SimpleRunner(platform::int64 vertexNum, platform::int64 edgeNum,
       std::string filePath);
 private:
   std::string file;
@@ -36,8 +37,8 @@ RunnerInterface::~RunnerInterface() {
 }
 
 template <class MessageT, class EdgeT, class VertexT>
-SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::ll vertexNum,
-    platform::ll edgeNum, std::string filePath) {
+SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
+    platform::int64 edgeNum, std::string filePath) {
   file = filePath;
   framework::GraphBuilderInterface* gbuild = new
       framework::SimpleGraphBuilder<VertexT>();
@@ -49,6 +50,7 @@ template <class MessageT, class EdgeT, class VertexT>
 void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
   for (int i = 1; i <= iteration; i++) {
     delete(reader);
+    std::cout<<"iteration: "<<i<<std::endl;
     reader = new framework::SimpleReader(file);
     framework::EdgeInterface* tmp = new EdgeT();
     framework::MessageInterface* msg = new MessageT();

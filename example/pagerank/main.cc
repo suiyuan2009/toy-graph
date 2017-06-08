@@ -14,7 +14,7 @@ namespace pagerank {
 
 class Message : public framework::MessageInterface {
 public:
-  platform::db msg;
+  platform::float32 msg;
 };
 
 class Edge : public framework::EdgeInterface {
@@ -48,12 +48,12 @@ public:
     dst->gather(sendMsg);
   }
 private:
-  platform::ll src_idx, dst_idx, src_degree;
+  platform::int64 src_idx, dst_idx, src_degree;
 };
 
 class Vertex : public framework::VertexInterface {
 public:
-  Vertex(platform::ll idx) : idx(idx) {
+  Vertex() {
     value = 1.0;
     msg = 0.0;
   }
@@ -74,8 +74,7 @@ public:
   }
 
 private:
-  platform::ll idx;
-  platform::db value, msg;
+  platform::float32 value, msg;
 };
 
 } // pagerank
@@ -83,7 +82,7 @@ private:
 
 int main() {
   std::string filePath= "/home/mlx/infomall_link_graph.bin.sorted";
-  platform::ll vNum = 3832209324L, eNum = 270497304397L;
+  platform::int64 vNum = 3832209324L, eNum = 270497304397L;
   int iteration = 2;
   runtime::RunnerInterface* runner = new runtime::SimpleRunner<example::pagerank::Message, example::pagerank::Edge, example::pagerank::Vertex>(vNum, eNum, filePath);
   runner->run(iteration);

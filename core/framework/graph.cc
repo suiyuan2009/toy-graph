@@ -6,11 +6,11 @@
 
 namespace framework {
 
-GraphInterface::GraphInterface(platform::ll vNum, platform::ll eNum) {
+GraphInterface::GraphInterface(platform::int64 vNum, platform::int64 eNum) {
   vertexNum = vNum, edgeNum = eNum;
 }
 
-SimpleGraph::SimpleGraph(platform::ll vNum, platform::ll eNum):
+SimpleGraph::SimpleGraph(platform::int64 vNum, platform::int64 eNum):
     GraphInterface(vNum, eNum) {
  vertexes = std::vector<VertexInterface*>(vNum);
 }
@@ -19,7 +19,7 @@ SimpleGraph::~SimpleGraph() {
   vertexes.clear();
 }
 
-bool SimpleGraph::getVertex(platform::ll idx, VertexInterface* v) {
+bool SimpleGraph::getVertex(platform::int64 idx, VertexInterface* v) {
   if (idx >= vertexNum) {
     return false;
   }
@@ -31,7 +31,7 @@ void SimpleGraph::updateVertex(VertexInterface* v) {
   v->update();
 }
 
-void SimpleGraph::initVertex(platform::ll idx, VertexInterface* v) {
+void SimpleGraph::initVertex(platform::int64 idx, VertexInterface* v) {
   delete(vertexes[idx]);
   vertexes[idx] = v;
 }
