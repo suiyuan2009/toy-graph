@@ -26,7 +26,7 @@ PosixFile::~PosixFile() {
   Free(filePath);
 }
 
-void PosixFile::sequentialRead(char* buffer, int size, int& bytes_read) {
+void PosixFile::sequentialRead(void* buffer, int size, int& bytes_read) {
   if (fd == -1) {
     bytes_read = 0;
     return;

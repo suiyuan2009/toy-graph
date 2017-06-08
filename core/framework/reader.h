@@ -27,7 +27,7 @@ public:
   bool get(EdgeInterface* edge) override;
 private:
   platform::FileInterface* file;
-  char* buf;
+  void* buf;
   int offset, bufSize;
 };
 

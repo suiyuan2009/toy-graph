@@ -7,7 +7,7 @@ namespace platform {
 class FileInterface {
 public:
   virtual ~FileInterface() {};
-  virtual void sequentialRead(char* buffer, int size, int& bytes_read) = 0;
+  virtual void sequentialRead(void* buffer, int size, int& bytes_read) = 0;
 };
 
 class PosixFile : public FileInterface {
@@ -17,7 +17,7 @@ public:
   PosixFile & operator=(const PosixFile& pf) = delete;
   PosixFile(std::string& path);
   ~PosixFile() override;
-  void sequentialRead(char* buffer, int size, int& bytes_read) override;
+  void sequentialRead(void* buffer, int size, int& bytes_read) override;
 private:
   char* filePath;
   int fd;

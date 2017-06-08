@@ -31,19 +31,19 @@ SimpleGraph::~SimpleGraph() {
 }
 
 void SimpleGraph::scatter(platform::int64 idx, MessageInterface* msg) {
-  vertex->gather((char*)vertexBuf, idx * oneVertexSize, msg);
+  vertex->gather(vertexBuf, idx * oneVertexSize, msg);
 }
 
 void SimpleGraph::updateOneVertex(platform::int64 idx) {
-  vertex->update((char*)vertexBuf, idx * oneVertexSize);
+  vertex->update(vertexBuf, idx * oneVertexSize);
 }
 
 void SimpleGraph::initOneVertex(platform::int64 idx) {
-  vertex->initOneVertex((char*)vertexBuf, idx * oneVertexSize);
+  vertex->initOneVertex(vertexBuf, idx * oneVertexSize);
 }
 
 void SimpleGraph::getVertexInfo(platform::int64 idx, MessageInterface* msg) {
-  vertex->get((char*)vertexBuf, idx * oneVertexSize, msg);
+  vertex->get(vertexBuf, idx * oneVertexSize, msg);
 }
 
 void SimpleGraph::updateAllVertex() {

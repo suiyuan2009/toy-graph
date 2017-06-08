@@ -19,11 +19,16 @@ public:
 
 class Edge : public framework::EdgeInterface {
 public:
-  bool read(char* buf, int size, int& offset) override {
+  bool read(void* buf, int size, int& offset) override {
     if (offset + 12 > size) {
       offset = size;
       return false;
     }
+    platform::uint32* tmp_buf = (platform::uint32*)buf;
+    src_idx = tmp_buf[offset>>2];
+    dst_idx = tmp_buf[(offset>>2) + 1];
+    src_degree = tmp_buf[(offset>>2) + 2];
+    offset += 12;
     std::cout<<src_idx<<" "<<dst_idx<<" "<<src_degree<<std::endl;
     return true;
   }
@@ -43,17 +48,17 @@ class Vertex : public framework::VertexInterface {
 public:
   Vertex() {}
 
-  void update(char* buf, platform::int64 offset) override {
+  void update(void* buf, platform::int64 offset) override {
   }
 
-  void get(char* buf, platform::int64 offset,
+  void get(void* buf, platform::int64 offset,
       framework::MessageInterface* msg) override {
   }
 
-  void gather(char*buf, platform::int64 offset,
+  void gather(void*buf, platform::int64 offset,
       framework::MessageInterface* message) override {
   }
-  void initOneVertex(char* buf, platform::int64 offset) {
+  void initOneVertex(void* buf, platform::int64 offset) {
 
   }
 };
