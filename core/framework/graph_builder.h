@@ -10,13 +10,15 @@ class GraphInterface;
 
 class GraphBuilderInterface {
 public:
-  virtual GraphInterface* build(platform::ll vertexNum) = 0;
+  virtual GraphInterface* build(platform::ll vertexNum,
+      platform::ll edgeNum) = 0;
+  virtual ~GraphBuilderInterface();
 };
 
 template <class VertexT>
 class SimpleGraphBuilder : public GraphBuilderInterface {
 public:
-  GraphInterface* build(platform::ll vertexNum) override;
+  GraphInterface* build(platform::ll vertexNum, platform::ll edgeNum) override;
 };
 
 }

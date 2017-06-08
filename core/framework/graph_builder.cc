@@ -4,8 +4,9 @@
 namespace framework {
 
 template <class VertexT>
-GraphInterface* SimpleGraphBuilder<VertexT>::build(platform::ll vertexNum) {
-  SimpleGraphBuilder* simpleGraph = new SimpleGraph(vertexNum);
+GraphInterface* SimpleGraphBuilder<VertexT>::build(platform::ll vertexNum,
+    platform::ll edgeNum) {
+  SimpleGraphBuilder* simpleGraph = new SimpleGraph(vertexNum, edgeNum);
   for (platform::ll i = 0; i < vertexNum; i++) {
     simpleGraph->vertexes[i] = new VertexT(i);
   }

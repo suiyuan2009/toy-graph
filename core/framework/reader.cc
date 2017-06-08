@@ -17,13 +17,13 @@ SimpleReader::~SimpleReader() {
   delete(file);
 }
 
-bool SimpleReader::get(EdgeInterface& edge) {
+bool SimpleReader::get(EdgeInterface* edge) {
   if (offset >= readerBufSize) {
     file->sequentialRead(buf, readerBufSize, bufSize);
     if (bufSize == 0) return false;
     offset = 0;
   }
-  return edge.read(buf, bufSize, offset);
+  return edge->read(buf, bufSize, offset);
 }
 
 }

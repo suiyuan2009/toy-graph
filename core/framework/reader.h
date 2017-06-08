@@ -13,7 +13,7 @@ const int readerBufSize = 100;
 
 class ReaderInterface {
 public:
-  virtual bool get(EdgeInterface& edge) = 0;
+  virtual bool get(EdgeInterface* edge) = 0;
   virtual ~ReaderInterface() = 0;
 };
 
@@ -24,7 +24,7 @@ public:
   SimpleReader(const SimpleReader& r) = delete;
   SimpleReader& operator=(const SimpleReader& r) = delete;
   SimpleReader(std::string filePath);
-  bool get(EdgeInterface& edge) override;
+  bool get(EdgeInterface* edge) override;
 private:
   platform::FileInterface* file;
   char* buf;
