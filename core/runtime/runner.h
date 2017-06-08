@@ -42,6 +42,7 @@ SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
   file = filePath;
   framework::GraphBuilderInterface* gbuild = new
       framework::SimpleGraphBuilder<VertexT>();
+  std::cout<<"start build graph, vertex num is "<<vertexNum<<std::endl;
   graph = gbuild->build(vertexNum, edgeNum);
   delete(gbuild);
 };
