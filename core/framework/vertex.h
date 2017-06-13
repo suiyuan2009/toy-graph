@@ -18,7 +18,8 @@ public:
   virtual void get(void* buf, platform::int64 offset,
       MessageInterface* msg) = 0;
   virtual ~VertexInterface() {}
-  virtual std::string getOutput(void* buf, platform::int64 offset) = 0;
+  virtual std::string getOutput(void* buf, platform::int64 offset,
+      platform::int64 idx) = 0;
 };
 
 }

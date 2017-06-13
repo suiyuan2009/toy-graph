@@ -50,7 +50,7 @@ SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
   std::unique_ptr<framework::GraphBuilderInterface> gbuild(new
       framework::SimpleGraphBuilder<VertexT>());
   LOG(util::DEBUG)<<"start build graph, vertex num is "<<vertexNum<<
-      ", edge num is "<<edgeNum<<std::endl;
+      ", edge num is "<<edgeNum;
   graph = gbuild->build(vertexNum, edgeNum);
   writer = new framework::SimpleWriter(outputFile);
 };
@@ -59,28 +59,28 @@ template <class MessageT, class EdgeT, class VertexT>
 void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
   for (int i = 1; i <= iteration; i++) {
     delete(reader);
-    LOG(util::DEBUG)<<"start iteration: "<<i<<std::endl;
+    LOG(util::DEBUG)<<"start iteration: "<<i;
     reader = new framework::SimpleReader(inputFile);
     framework::EdgeInterface* edge = new EdgeT();
     framework::MessageInterface* msg = new MessageT();
     platform::int64 edgeNumDEBUG = 0;
     int processPercent = 0;
     platform::int64 percent = graph->getEdgeNum() / 100;
-    LOG(util::DEBUG)<<"edge percent is "<<percent<<std::endl;
+    LOG(util::DEBUG)<<"edge percent is "<<percent;
     while (reader->get(edge)) {
       edge->scatter(graph, msg);
       edgeNumDEBUG++;
       if (edgeNumDEBUG == percent) {
         processPercent++;
         edgeNumDEBUG = 0;
-        LOG(util::DEBUG)<<"process %"<<processPercent<<" edges"<< std::endl;
+        LOG(util::INFO)<<"process %"<<processPercent<<" edges";
       }
     }
     LOG(util::DEBUG)<<"process %100 edges"<< std::endl;
     delete(edge);
     delete(msg);
     graph->updateAllVertex();
-    LOG(util::DEBUG)<<"finish iteration: "<<i<<std::endl;
+    LOG(util::DEBUG)<<"finish iteration: "<<i;
   }
   for (platform::int64 i = 0; i < graph->getVertexNum(); i++) {
     writer->write(graph->getVertexOutput(i));

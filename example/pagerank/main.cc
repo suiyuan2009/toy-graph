@@ -79,9 +79,11 @@ public:
     tmp_buf[(offset>>2) + 1] = 0.0;
   }
 
-  std::string getOutput(void* buf, platform::int64 offset) override {
+  std::string getOutput(void* buf, platform::int64 offset,
+      platform::int64 idx) override {
     platform::float32* tmp_buf = (platform::float32*)buf;
-    return std::to_string(tmp_buf[offset>>2]);
+    return std::to_string(idx) + "\t" + std::to_string(tmp_buf[offset>>2]) +
+           "\n";
   }
 };
 
@@ -92,7 +94,7 @@ int main() {
   std::string filePath= "/home/suiyuan2009/infomall_link_graph.bin";
   std::string outputPath= "/home/suiyuan2009/infomall_pagerank_value";
   platform::int64 vNum = 3832209324L, eNum = 70497304397L;
-  int iteration = 2;
+  int iteration = 1;
   runtime::RunnerInterface* runner = new runtime::SimpleRunner<
       example::pagerank::Message, example::pagerank::Edge,
           example::pagerank::Vertex>(vNum, eNum, filePath, outputPath);

@@ -14,5 +14,6 @@ cc_library(
   name = "file",
   srcs = ["file.cc"],
   hdrs = ["file.h"],
-  deps = [":malloc"],
+  deps = [":malloc",
+          "//core/util:logging"],
 )

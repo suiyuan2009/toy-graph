@@ -33,9 +33,12 @@ std::ostringstream& Log::Get(LogLevel _level) {
 }
 
 Log::~Log() {
-  //os << std::endl;
+  os << std::endl;
   fprintf(stderr, "%s", os.str().c_str());
   fflush(stderr);
+  if (level == ERROR) {
+    exit(-1);
+  }
 }
 
 }

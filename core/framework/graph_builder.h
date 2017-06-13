@@ -29,11 +29,11 @@ GraphInterface* SimpleGraphBuilder<VertexT>::build(platform::int64 vertexNum,
   SimpleGraph* simpleGraph = new SimpleGraph(vertexNum, edgeNum);
   VertexInterface* vertex = new VertexT();
   simpleGraph->setVertex(vertex);
-  LOG(util::INFO)<<"start init every vertex."<<std::endl;
+  LOG(util::INFO)<<"start init every vertex.";
   for (platform::int64 i = 0; i < vertexNum; i++) {
     simpleGraph->initOneVertex(i);
   }
-  LOG(util::INFO)<<"finish init every vertex."<<std::endl;
+  LOG(util::INFO)<<"finish init every vertex.";
   return simpleGraph;
 }
 

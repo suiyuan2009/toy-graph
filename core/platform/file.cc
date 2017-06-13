@@ -5,6 +5,7 @@
 
 #include "core/platform/file.h"
 #include "core/platform/malloc.h"
+#include "core/util/logging.h"
 
 namespace platform {
 
@@ -16,7 +17,7 @@ PosixFile::PosixFile(std::string& path) {
 PosixFile::~PosixFile() {
   if (fd != -1) {
     if (close(fd) != 0) {
-      //do something.
+      LOG(util::ERROR) << "file " << filePath << " can't be closed!";
     }
   }
   Free(filePath);
@@ -25,7 +26,7 @@ PosixFile::~PosixFile() {
 PosixReadFile::PosixReadFile(std::string& path) : PosixFile(path) {
   fd = open(filePath, O_RDONLY);
   if (fd == -1) {
-    // do some;
+    LOG(util::ERROR) << "file " << filePath << " can't be opened!";
   }
 }
 
@@ -41,7 +42,7 @@ PosixAppendWriteFile::PosixAppendWriteFile(std::string& path)
     : PosixFile(path) {
   fd = open(filePath, O_WRONLY | O_APPEND);
   if (fd == -1) {
-    //do some;
+    LOG(util::ERROR) << "file " << filePath << " can't be opened!";
   }
 }
 
@@ -49,7 +50,7 @@ void PosixAppendWriteFile::write(std::string& str) {
   char* tmp = (char*)Malloc(str.size());
   strcpy(tmp, str.c_str());
   if (::write(fd, tmp, str.size()) == -1) {
-    // do some;
+    LOG(util::ERROR) << "file " << filePath << " can't append write!";
   }
 }
 

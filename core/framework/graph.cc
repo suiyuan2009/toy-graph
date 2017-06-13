@@ -61,7 +61,7 @@ platform::int64 SimpleGraph::getVertexNum() {
 }
 
 std::string SimpleGraph::getVertexOutput(platform::int64 idx) {
-  return vertex->getOutput(vertexBuf, idx * oneVertexSize);
+  return vertex->getOutput(vertexBuf, idx * oneVertexSize, idx);
 }
 
 }
