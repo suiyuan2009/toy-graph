@@ -6,7 +6,7 @@
 namespace framework {
 
 SimpleReader::SimpleReader(std::string filePath) {
-  file = new platform::PosixFile(filePath);
+  file = new platform::PosixReadFile(filePath);
   offset = readerBufSize;
   bufSize = 0;
   buf = platform::Malloc(readerBufSize);

@@ -5,6 +5,7 @@ cc_library(
   deps = ["edge",
           "vertex",
           "reader",
+          "writer",
           "graph",
           "graph_builder",
           "message",
@@ -37,6 +38,14 @@ cc_library(
           "//core/platform:types",
           "//core/platform:file",
           ],
+)
+
+cc_library(
+  name = "writer",
+  hdrs = ["writer.h"],
+  srcs = ["writer.cc"],
+  deps = ["//core/platform:file",
+          "//core/platform:types"],
 )
 
 cc_library(

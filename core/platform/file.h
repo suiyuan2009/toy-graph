@@ -8,6 +8,7 @@ class FileInterface {
 public:
   virtual ~FileInterface() {};
   virtual void sequentialRead(void* buffer, int size, int& bytes_read) = 0;
+  virtual void write(std::string& str) = 0;
 };
 
 class PosixFile : public FileInterface {
@@ -16,11 +17,25 @@ public:
   PosixFile(const PosixFile& pf) = delete;
   PosixFile & operator=(const PosixFile& pf) = delete;
   PosixFile(std::string& path);
-  ~PosixFile() override;
-  void sequentialRead(void* buffer, int size, int& bytes_read) override;
-private:
+  virtual ~PosixFile() override;
+  virtual void sequentialRead(void* buffer, int size, int& bytes_read)
+      override {};
+  virtual void write(std::string& str) override {};
+protected:
   char* filePath;
   int fd;
+};
+
+class PosixReadFile : public PosixFile {
+public:
+  PosixReadFile(std::string& path);
+  void sequentialRead(void* buffer, int size, int& bytes_read) override;
+};
+
+class PosixAppendWriteFile : public PosixFile {
+public:
+  PosixAppendWriteFile(std::string& path);
+  void write(std::string& str) override;
 };
 
 }

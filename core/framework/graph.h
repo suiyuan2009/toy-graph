@@ -1,7 +1,7 @@
 #ifndef CORE_FRAMEWORK_GRAPH_H
 #define CORE_FRAMEWORK_GRAPH_H
 
-#include <vector>
+#include <string>
 
 #include "core/framework/message.h"
 #include "core/framework/vertex.h"
@@ -19,6 +19,8 @@ public:
   virtual void scatter(platform::int64 idx, MessageInterface* msg) = 0;
   virtual ~GraphInterface();
   virtual platform::int64 getEdgeNum() = 0;
+  virtual platform::int64 getVertexNum() = 0;
+  virtual std::string getVertexOutput(platform::int64 idx) = 0;
 protected:
   platform::int64 vertexNum, edgeNum, vertexBufSize;
   void* vertexBuf;
@@ -38,6 +40,8 @@ public:
   void scatter(platform::int64 idx, MessageInterface* msg) override;
   void setVertex(VertexInterface* v);
   platform::int64 getEdgeNum() override;
+  platform::int64 getVertexNum() override;
+  std::string getVertexOutput(platform::int64 idx) override;
 private:
   VertexInterface* vertex;
 };

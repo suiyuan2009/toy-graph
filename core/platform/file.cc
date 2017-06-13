@@ -11,10 +11,6 @@ namespace platform {
 PosixFile::PosixFile(std::string& path) {
   filePath = (char*)Malloc(path.size());
   strcpy(filePath, path.c_str());
-  fd = open(filePath, O_RDONLY);
-  if (fd == -1) {
-    //do something.
-  }
 }
 
 PosixFile::~PosixFile() {
@@ -26,12 +22,35 @@ PosixFile::~PosixFile() {
   Free(filePath);
 }
 
-void PosixFile::sequentialRead(void* buffer, int size, int& bytes_read) {
+PosixReadFile::PosixReadFile(std::string& path) : PosixFile(path) {
+  fd = open(filePath, O_RDONLY);
+  if (fd == -1) {
+    // do some;
+  }
+}
+
+void PosixReadFile::sequentialRead(void* buffer, int size, int& bytes_read) {
   if (fd == -1) {
     bytes_read = 0;
     return;
   }
   bytes_read = read(fd, buffer, size);
+}
+
+PosixAppendWriteFile::PosixAppendWriteFile(std::string& path)
+    : PosixFile(path) {
+  fd = open(filePath, O_WRONLY | O_APPEND);
+  if (fd == -1) {
+    //do some;
+  }
+}
+
+void PosixAppendWriteFile::write(std::string& str) {
+  char* tmp = (char*)Malloc(str.size());
+  strcpy(tmp, str.c_str());
+  if (::write(fd, tmp, str.size()) == -1) {
+    // do some;
+  }
 }
 
 }

@@ -27,7 +27,7 @@ std::string toString(LogLevel l) {
 
 std::ostringstream& Log::Get(LogLevel _level) {
   level = _level;
-  os << "- " << nowTime();
+  os << nowTime();
   os << " " << toString(level) << ": ";
   return os;
 }

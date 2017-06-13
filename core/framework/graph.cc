@@ -1,4 +1,4 @@
-#include <vector>
+#include <string>
 
 #include "core/framework/graph.h"
 #include "core/framework/message.h"
@@ -54,6 +54,14 @@ void SimpleGraph::updateAllVertex() {
 
 platform::int64 SimpleGraph::getEdgeNum() {
   return edgeNum;
+}
+
+platform::int64 SimpleGraph::getVertexNum() {
+  return vertexNum;
+}
+
+std::string SimpleGraph::getVertexOutput(platform::int64 idx) {
+  return vertex->getOutput(vertexBuf, idx * oneVertexSize);
 }
 
 }
