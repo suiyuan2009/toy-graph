@@ -40,7 +40,7 @@ void PosixReadFile::sequentialRead(void* buffer, int size, int& bytes_read) {
 
 PosixAppendWriteFile::PosixAppendWriteFile(std::string& path)
     : PosixFile(path) {
-  fd = open(filePath, O_WRONLY | O_APPEND);
+  fd = open(filePath, O_WRONLY | O_APPEND | O_CREAT);
   if (fd == -1) {
     LOG(util::ERROR) << "file " << filePath << " can't be opened!";
   }
