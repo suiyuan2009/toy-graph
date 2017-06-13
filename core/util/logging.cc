@@ -6,9 +6,13 @@
 
 namespace util {
 
-char* nowTime() {
-  time_t now = time(0);
-  return ctime(&now);
+std::string nowTime() {
+  time_t rawtime;
+  char buffer[20];
+  time(&rawtime);
+  struct tm * timeinfo = localtime(&rawtime);
+  strftime(buffer, sizeof(buffer), "%d-%m-%Y %I:%M:%S", timeinfo);
+  return std::string(buffer);
 }
 
 std::string toString(LogLevel l) {
@@ -29,7 +33,7 @@ std::ostringstream& Log::Get(LogLevel _level) {
 }
 
 Log::~Log() {
-  os << std::endl;
+  //os << std::endl;
   fprintf(stderr, "%s", os.str().c_str());
   fflush(stderr);
 }
