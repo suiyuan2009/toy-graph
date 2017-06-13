@@ -18,6 +18,7 @@ public:
   virtual void getVertexInfo(platform::int64 idx, MessageInterface* msg) = 0;
   virtual void scatter(platform::int64 idx, MessageInterface* msg) = 0;
   virtual ~GraphInterface();
+  virtual platform::int64 getEdgeNum() = 0;
 protected:
   platform::int64 vertexNum, edgeNum, vertexBufSize;
   void* vertexBuf;
@@ -36,6 +37,7 @@ public:
   void getVertexInfo(platform::int64 idx, MessageInterface* msg) override;
   void scatter(platform::int64 idx, MessageInterface* msg) override;
   void setVertex(VertexInterface* v);
+  platform::int64 getEdgeNum() override;
 private:
   VertexInterface* vertex;
 };

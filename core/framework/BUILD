@@ -51,5 +51,6 @@ cc_library(
 cc_library(
   name = "graph_builder",
   hdrs = ["graph_builder.h"],
-  deps = [":graph"],
+  deps = [":graph",
+          "//core/util:logging"],
 )

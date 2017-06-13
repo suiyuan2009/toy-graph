@@ -29,7 +29,7 @@ public:
     dst_idx = tmp_buf[(offset>>2) + 1];
     src_degree = tmp_buf[(offset>>2) + 2];
     offset += 12;
-    std::cout<<src_idx<<" "<<dst_idx<<" "<<src_degree<<std::endl;
+    //std::cout<<src_idx<<" "<<dst_idx<<" "<<src_degree<<std::endl;
     return true;
   }
 
@@ -58,7 +58,7 @@ public:
   void gather(void*buf, platform::int64 offset,
       framework::MessageInterface* message) override {
   }
-  void initOneVertex(void* buf, platform::int64 offset) {
+  void initOneVertex(void* buf, platform::int64 offset) override {
 
   }
 };
@@ -67,8 +67,8 @@ public:
 } // example
 
 int main() {
-  std::string filePath= "/home/mlx/infomall_link_graph.bin.sorted";
-  platform::int64 vNum = 3832209324L, eNum = 270497304397L;
+  std::string filePath= "/home/suiyuan2009/infomall_link_graph.bin";
+  platform::int64 vNum = 3832209324L, eNum = 70497304397L;
   int iteration = 2;
   runtime::RunnerInterface* runner = new runtime::SimpleRunner<example::pagerank::Message, example::pagerank::Edge, example::pagerank::Vertex>(vNum, eNum, filePath);
   runner->run(iteration);

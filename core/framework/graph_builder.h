@@ -5,6 +5,7 @@
 
 #include "core/framework/graph.h"
 #include "core/platform/types.h"
+#include "core/util/logging.h"
 
 namespace framework {
 
@@ -28,11 +29,11 @@ GraphInterface* SimpleGraphBuilder<VertexT>::build(platform::int64 vertexNum,
   SimpleGraph* simpleGraph = new SimpleGraph(vertexNum, edgeNum);
   VertexInterface* vertex = new VertexT();
   simpleGraph->setVertex(vertex);
-  std::cout<<"start init every vertex."<<std::endl;
+  LOG(util::INFO)<<"start init every vertex."<<std::endl;
   for (platform::int64 i = 0; i < vertexNum; i++) {
     simpleGraph->initOneVertex(i);
   }
-  std::cout<<"finish init every vertex."<<std::endl;
+  LOG(util::INFO)<<"finish init every vertex."<<std::endl;
   return simpleGraph;
 }
 

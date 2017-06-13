@@ -52,4 +52,8 @@ void SimpleGraph::updateAllVertex() {
   }
 }
 
+platform::int64 SimpleGraph::getEdgeNum() {
+  return edgeNum;
+}
+
 }
