@@ -42,7 +42,5 @@ private:
   VertexInterface* vertex;
 };
 
-
-
 }
 #endif

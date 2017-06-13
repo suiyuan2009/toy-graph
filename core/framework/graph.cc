@@ -27,7 +27,7 @@ void SimpleGraph::setVertex(VertexInterface* v) {
 }
 
 SimpleGraph::~SimpleGraph() {
-  platform::Free(vertex);
+  delete(vertex);
 }
 
 void SimpleGraph::scatter(platform::int64 idx, MessageInterface* msg) {

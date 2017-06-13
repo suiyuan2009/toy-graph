@@ -2,6 +2,7 @@
 #define CORE_RUNTIME_RUNNER_H
 
 #include <iostream>
+#include <memory>
 #include <string>
 
 #include "core/framework/graph.h"
@@ -42,12 +43,11 @@ template <class MessageT, class EdgeT, class VertexT>
 SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
     platform::int64 edgeNum, std::string filePath) {
   file = filePath;
-  framework::GraphBuilderInterface* gbuild = new
+  std::unique_ptr<framework::GraphBuilderInterface> gbuild = new
       framework::SimpleGraphBuilder<VertexT>();
-  LOG(util::DEBUG)<<"start build graph, vertex num is "<<vertexNum<<", edge num is "
-      <<edgeNum<<std::endl;
+  LOG(util::DEBUG)<<"start build graph, vertex num is "<<vertexNum<<
+      ", edge num is "<<edgeNum<<std::endl;
   graph = gbuild->build(vertexNum, edgeNum);
-  delete(gbuild);
 };
 
 template <class MessageT, class EdgeT, class VertexT>
@@ -80,5 +80,4 @@ void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
 };
 
 }
-
 #endif
