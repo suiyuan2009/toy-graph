@@ -56,6 +56,7 @@ void PosixAppendWriteFile::write(std::string& str) {
   if ((debug = ::write(fd, tmp, str.size())) != (int)str.size()) {
     LOG(util::ERROR) << "file " << filePath << " write error!";
   }
+  Free(tmp);
 }
 
 }

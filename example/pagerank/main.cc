@@ -99,5 +99,6 @@ int main() {
       example::pagerank::Message, example::pagerank::Edge,
           example::pagerank::Vertex>(vNum, eNum, filePath, outputPath);
   runner->run(iteration);
+  delete(runner);
   return 0;
 }
