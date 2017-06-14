@@ -45,7 +45,8 @@ cc_library(
   hdrs = ["writer.h"],
   srcs = ["writer.cc"],
   deps = ["//core/platform:file",
-          "//core/platform:types"],
+          "//core/platform:types",
+          "//core/util:logging"],
 )
 
 cc_library(
@@ -54,7 +55,8 @@ cc_library(
   srcs = ["graph.cc"],
   deps = ["//core/platform:types",
           ":vertex",
-          "//core/platform:malloc"],
+          "//core/platform:malloc",
+          "//core/util:logging"],
 )
 
 cc_library(

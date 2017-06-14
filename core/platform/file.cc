@@ -10,7 +10,7 @@
 namespace platform {
 
 PosixFile::PosixFile(std::string& path) {
-  filePath = (char*)Malloc(path.size());
+  filePath = (char*)Malloc(path.size() * sizeof(char) + 1);
   strcpy(filePath, path.c_str());
 }
 
@@ -47,10 +47,14 @@ PosixAppendWriteFile::PosixAppendWriteFile(std::string& path)
 }
 
 void PosixAppendWriteFile::write(std::string& str) {
-  char* tmp = (char*)Malloc(str.size());
+  //LOG(util::DEBUG) << "need to write " << str.size();
+  //usleep(100000);
+  char* tmp = (char*)Malloc(str.size() * sizeof(char) + 1);
+  //LOG(util::DEBUG) << "malloc success";
   strcpy(tmp, str.c_str());
-  if (::write(fd, tmp, str.size()) == -1) {
-    LOG(util::ERROR) << "file " << filePath << " can't append write!";
+  int debug;
+  if ((debug = ::write(fd, tmp, str.size())) != (int)str.size()) {
+    LOG(util::ERROR) << "file " << filePath << " write error!";
   }
 }
 

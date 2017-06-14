@@ -5,12 +5,14 @@
 #include "core/framework/vertex.h"
 #include "core/platform/malloc.h"
 #include "core/platform/types.h"
+#include "core/util/logging.h"
 
 namespace framework {
 
 GraphInterface::GraphInterface(platform::int64 vNum, platform::int64 eNum) {
   vertexNum = vNum, edgeNum = eNum;
   vertexBufSize = framework::oneVertexSize * vNum;
+  LOG(util::DEBUG) << "vertex buf size is " << vertexBufSize;
   vertexBuf = platform::Malloc(vertexBufSize);
 }
 
