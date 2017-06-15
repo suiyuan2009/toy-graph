@@ -9,9 +9,11 @@
 
 namespace framework {
 
-GraphInterface::GraphInterface(platform::int64 vNum, platform::int64 eNum) {
+GraphInterface::GraphInterface(platform::int64 vNum, platform::int64 eNum,
+    int ovs) {
+  oneVertexSize = ovs;
   vertexNum = vNum, edgeNum = eNum;
-  vertexBufSize = framework::oneVertexSize * vNum;
+  vertexBufSize = oneVertexSize * vNum;
   LOG(util::DEBUG) << "vertex buf size is " << vertexBufSize;
   vertexBuf = platform::Malloc(vertexBufSize);
 }
@@ -20,8 +22,8 @@ GraphInterface::~GraphInterface() {
   platform::Free(vertexBuf);
 }
 
-SimpleGraph::SimpleGraph(platform::int64 vNum, platform::int64 eNum):
-    GraphInterface(vNum, eNum) {
+SimpleGraph::SimpleGraph(platform::int64 vNum, platform::int64 eNum, int ovs):
+    GraphInterface(vNum, eNum, ovs) {
 }
 
 void SimpleGraph::setVertex(VertexInterface* v) {

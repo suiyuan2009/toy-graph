@@ -8,7 +8,6 @@
 
 namespace framework {
 
-const platform::int32 oneVertexSize = 8;
 class VertexInterface {
 public:
   virtual void update(void* buf, platform::int64 offset) = 0;

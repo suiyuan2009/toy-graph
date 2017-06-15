@@ -37,6 +37,7 @@ cc_library(
           ":vertex",
           "//core/platform:types",
           "//core/platform:file",
+          "//core/util:logging",
           ],
 )
 

@@ -11,7 +11,7 @@ namespace framework {
 
 class GraphInterface {
 public:
-  GraphInterface(platform::int64 vNum, platform::int64 eNum);
+  GraphInterface(platform::int64 vNum, platform::int64 eNum, int oneVertexSize);
   virtual void updateAllVertex() = 0;
   virtual void updateOneVertex(platform::int64 idx) = 0;
   virtual void initOneVertex(platform::int64 idx) = 0;
@@ -24,11 +24,12 @@ public:
 protected:
   platform::int64 vertexNum, edgeNum, vertexBufSize;
   void* vertexBuf;
+  int oneVertexSize;
 };
 
 class SimpleGraph : public GraphInterface {
 public:
-  SimpleGraph(platform::int64 vNum, platform::int64 eNum);
+  SimpleGraph(platform::int64 vNum, platform::int64 eNum, int initOneVertex);
   SimpleGraph() = delete;
   SimpleGraph(const SimpleGraph& sg) = delete;
   SimpleGraph& operator=(const SimpleGraph& sg) = delete;
