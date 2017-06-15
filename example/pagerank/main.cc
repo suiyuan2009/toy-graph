@@ -9,6 +9,7 @@
 #include "core/framework/vertex.h"
 #include "core/platform/types.h"
 #include "core/runtime/runner.h"
+#include "core/util/commandline.h"
 #include "core/util/logging.h"
 
 namespace example {
@@ -90,15 +91,25 @@ public:
 } // pagerank
 } // example
 
-int main() {
-  std::string filePath= "/home/suiyuan2009/infomall_link_graph.bin";
-  std::string outputPath= "/home/suiyuan2009/infomall_pagerank_value";
-  platform::int64 vNum = 3832209324L, eNum = 70497304397L;
-  int iteration = 1;
+int main(int argc, char* argv[]) {
+  //std::string filePath= "/home/suiyuan2009/infomall_link_graph.bin";
+  //std::string outputPath= "/home/suiyuan2009/infomall_pagerank_value";
+  //platform::int64 vNum = 3832209324L, eNum = 70497304397L;
+  //int iteration = 1;
+  util::CommandLine* cmdl = new util::CommandLine();
+  cmdl->addOption("input")->addOption("output")->addOption("vertexNum")
+      ->addOption("edgeNum")->addOption("iterations");
+  cmdl->parseCommandLine(argc, argv);
+  std::string inputPath = cmdl->getOptVal("input");
+  std::string outputPath = cmdl->getOptVal("output");
+  platform::int64 vNum = std::stoll(cmdl->getOptVal("vertexNum"));
+  platform::int64 eNum = std::stoll(cmdl->getOptVal("edgeNum"));
+  int iteration = std::stoi(cmdl->getOptVal("iterations"));
   runtime::RunnerInterface* runner = new runtime::SimpleRunner<
       example::pagerank::Message, example::pagerank::Edge,
-          example::pagerank::Vertex>(vNum, eNum, filePath, outputPath);
+          example::pagerank::Vertex>(vNum, eNum, inputPath, outputPath);
   runner->run(iteration);
   delete(runner);
+  delete(cmdl);
   return 0;
 }
