@@ -6,8 +6,9 @@
 
 namespace framework {
 
-SimpleReader::SimpleReader(std::string filePath, int rbs) {
-  readerBufSize = rbs;
+SimpleReader::SimpleReader(std::string filePath, int oes, int bufSize) {
+  oneEdgeSize = oes;
+  readerBufSize = oes * bufSize;
   file = new platform::PosixReadFile(filePath);
   this->filePath = filePath;
   offset = readerBufSize;

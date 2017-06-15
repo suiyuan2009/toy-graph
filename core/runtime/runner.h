@@ -55,7 +55,7 @@ SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
       ", edge num is "<<edgeNum;
   graph = gbuild->build(vertexNum, edgeNum, oneVertexSize);
   LOG(util::DEBUG) << "graph built";
-  reader = new framework::SimpleReader(inputFile, oneEdgeSize * 100);
+  reader = new framework::SimpleReader(inputFile, oneEdgeSize);
   writer = new framework::SimpleWriter(outputFile);
 };
 

@@ -22,7 +22,7 @@ public:
   ~SimpleReader() override;
   SimpleReader(const SimpleReader& r) = delete;
   SimpleReader& operator=(const SimpleReader& r) = delete;
-  SimpleReader(std::string filePath, int rbs);
+  SimpleReader(std::string filePath, int oes, int bufSize = 100);
   bool get(EdgeInterface* edge) override;
   void reset() override;
 private:
@@ -30,6 +30,7 @@ private:
   void* buf;
   int offset, bufSize;
   std::string filePath;
+  int oneEdgeSize;
   int readerBufSize;
 };
 
