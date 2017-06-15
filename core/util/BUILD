@@ -12,3 +12,11 @@ cc_library(
   hdrs = ["logging.h"],
   srcs = ["logging.cc"],
 )
+
+cc_test(
+  name = "commandline_test",
+  srcs = ["commandline_test.cc"],
+  copts = ["-Iexternal/gtest/include"],
+  deps = ["@gtest//:main",
+          ":commandline"],
+)
