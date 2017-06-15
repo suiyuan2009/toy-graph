@@ -101,11 +101,11 @@ int main(int argc, char* argv[]) {
   platform::int64 vNum = std::stoll(cmdl->getOptVal("vertexNum"));
   platform::int64 eNum = std::stoll(cmdl->getOptVal("edgeNum"));
   int iteration = std::stoi(cmdl->getOptVal("iterations"));
-  int oneVertexSize = 12;
+  int oneVertexSize = 8, oneEdgeSize = 12;
   runtime::RunnerInterface* runner = new runtime::SimpleRunner<
       example::pagerank::Message, example::pagerank::Edge,
           example::pagerank::Vertex>(vNum, eNum, inputPath, outputPath,
-              oneVertexSize);
+              oneVertexSize, oneEdgeSize);
   runner->run(iteration);
   delete(runner);
   delete(cmdl);

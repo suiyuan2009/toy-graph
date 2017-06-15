@@ -30,7 +30,8 @@ class SimpleRunner : public RunnerInterface {
 public:
   void run(int iteration);
   SimpleRunner(platform::int64 vertexNum, platform::int64 edgeNum,
-      std::string inputPath, std::string outputPath, int oneVertexSize);
+      std::string inputPath, std::string outputPath, int oneVertexSize,
+      int oneEdgeSize);
 private:
   std::string inputFile;
   std::string outputFile;
@@ -45,7 +46,7 @@ RunnerInterface::~RunnerInterface() {
 template <class MessageT, class EdgeT, class VertexT>
 SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
     platform::int64 edgeNum, std::string inputPath, std::string outputPath,
-    int oneVertexSize) {
+    int oneVertexSize, int oneEdgeSize) {
   inputFile = inputPath;
   outputFile = outputPath;
   std::unique_ptr<framework::GraphBuilderInterface> gbuild(new
@@ -54,7 +55,7 @@ SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
       ", edge num is "<<edgeNum;
   graph = gbuild->build(vertexNum, edgeNum, oneVertexSize);
   LOG(util::DEBUG) << "graph built";
-  reader = new framework::SimpleReader(inputFile, oneVertexSize * 100);
+  reader = new framework::SimpleReader(inputFile, oneEdgeSize * 100);
   writer = new framework::SimpleWriter(outputFile);
 };
 
