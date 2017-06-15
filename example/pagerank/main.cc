@@ -92,10 +92,6 @@ public:
 } // example
 
 int main(int argc, char* argv[]) {
-  //std::string filePath= "/home/suiyuan2009/infomall_link_graph.bin";
-  //std::string outputPath= "/home/suiyuan2009/infomall_pagerank_value";
-  //platform::int64 vNum = 3832209324L, eNum = 70497304397L;
-  //int iteration = 1;
   util::CommandLine* cmdl = new util::CommandLine();
   cmdl->addOption("input")->addOption("output")->addOption("vertexNum")
       ->addOption("edgeNum")->addOption("iterations");
