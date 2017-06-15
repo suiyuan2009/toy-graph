@@ -30,7 +30,7 @@ class SimpleRunner : public RunnerInterface {
 public:
   void run(int iteration);
   SimpleRunner(platform::int64 vertexNum, platform::int64 edgeNum,
-      std::string inputPath, std::string outputPath);
+      std::string inputPath, std::string outputPath, int oneVertexSize);
 private:
   std::string inputFile;
   std::string outputFile;
@@ -44,23 +44,32 @@ RunnerInterface::~RunnerInterface() {
 
 template <class MessageT, class EdgeT, class VertexT>
 SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
-    platform::int64 edgeNum, std::string inputPath, std::string outputPath) {
+    platform::int64 edgeNum, std::string inputPath, std::string outputPath,
+    int oneVertexSize) {
   inputFile = inputPath;
   outputFile = outputPath;
   std::unique_ptr<framework::GraphBuilderInterface> gbuild(new
       framework::SimpleGraphBuilder<VertexT>());
   LOG(util::DEBUG)<<"start build graph, vertex num is "<<vertexNum<<
       ", edge num is "<<edgeNum;
-  graph = gbuild->build(vertexNum, edgeNum);
+  graph = gbuild->build(vertexNum, edgeNum, oneVertexSize);
+  LOG(util::DEBUG) << "graph built";
+  reader = new framework::SimpleReader(inputFile, oneVertexSize * 100);
   writer = new framework::SimpleWriter(outputFile);
 };
 
 template <class MessageT, class EdgeT, class VertexT>
 void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
+  LOG(util::INFO)<<"start init every vertex.";
+  for (platform::int64 i = 0; i < graph->getVertexNum(); i++) {
+    graph->initOneVertex(i);
+  }
+  LOG(util::INFO)<<"finish init every vertex.";
+  LOG(util::INFO) << "start run computation.";
   for (int i = 1; i <= iteration; i++) {
-    delete(reader);
+    LOG(util::DEBUG) << "try to reset reader.";
+    reader->reset();
     LOG(util::DEBUG)<<"start iteration: "<<i;
-    reader = new framework::SimpleReader(inputFile);
     framework::EdgeInterface* edge = new EdgeT();
     framework::MessageInterface* msg = new MessageT();
     platform::int64 edgeNumDEBUG = 0;
