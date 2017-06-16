@@ -11,7 +11,7 @@ namespace framework {
 
 class ReaderInterface {
 public:
-  virtual bool get(EdgeInterface* edge) = 0;
+  virtual bool readInToEdge(EdgeInterface* edge) = 0;
   virtual void reset() = 0;
   virtual ~ReaderInterface() {};
 };
@@ -23,15 +23,16 @@ public:
   SimpleReader(const SimpleReader& r) = delete;
   SimpleReader& operator=(const SimpleReader& r) = delete;
   SimpleReader(std::string filePath, int oes, int bufSize = 100);
-  bool get(EdgeInterface* edge) override;
+  bool readInToEdge(EdgeInterface* edge) override;
   void reset() override;
 private:
   platform::FileInterface* file;
   void* buf;
-  int offset, bufSize;
-  std::string filePath;
+  int readerBufSize; // size of buf
+  int offset; // already read at offset
+  int bufSize; // data size in buf
   int oneEdgeSize;
-  int readerBufSize;
+  std::string filePath;
 };
 
 }

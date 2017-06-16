@@ -22,18 +22,11 @@ public:
 
 class Edge : public framework::EdgeInterface {
 public:
-  bool read(void* buf, int size, int& offset) override {
-    if (offset + 12 > size) {
-      offset = size;
-      return false;
-    }
+  void read(void* buf) override {
     platform::uint32* tmp_buf = (platform::uint32*)buf;
-    src_idx = tmp_buf[offset>>2];
-    dst_idx = tmp_buf[(offset>>2) + 1];
-    src_degree = tmp_buf[(offset>>2) + 2];
-    offset += 12;
-    //std::cout<<src_idx<<" "<<dst_idx<<" "<<src_degree<<std::endl;
-    return true;
+    src_idx = tmp_buf[0];
+    dst_idx = tmp_buf[1];
+    src_degree = tmp_buf[2];
   }
 
   void scatter(framework::GraphInterface* g,
@@ -51,36 +44,33 @@ class Vertex : public framework::VertexInterface {
 public:
   Vertex() {}
 
-  void update(void* buf, platform::int64 offset) override {
+  void update(void* buf) override {
     platform::float32* tmp_buf = (platform::float32*)buf;
-    tmp_buf[offset>>2] = tmp_buf[(offset>>2)+ 1] * 0.85 + 0.15;
-    tmp_buf[(offset>>2) + 1] = 0;
+    tmp_buf[0] = tmp_buf[1] * 0.85 + 0.15;
+    tmp_buf[1] = 0;
   }
 
-  void get(void* buf, platform::int64 offset,
-      framework::MessageInterface* msg) override {
+  void getValue(void* buf, framework::MessageInterface* msg) override {
     platform::float32* tmp_buf = (platform::float32*)buf;
     Message* tmp = (Message*)msg;
-    tmp->msg = tmp_buf[offset>>2];
+    tmp->msg = tmp_buf[0];
   }
 
-  void gather(void*buf, platform::int64 offset,
-      framework::MessageInterface* msg) override {
+  void gather(void* buf, framework::MessageInterface* msg) override {
     platform::float32* tmp_buf = (platform::float32*)buf;
     Message* tmp = (Message*)msg;
-    tmp_buf[(offset>>2) + 1] += tmp->msg;
-  }
-  void initOneVertex(void* buf, platform::int64 offset) override {
-    platform::float32* tmp_buf = (platform::float32*)buf;
-    tmp_buf[offset>>2] = 1.0;
-    tmp_buf[(offset>>2) + 1] = 0.0;
+    tmp_buf[1] += tmp->msg;
   }
 
-  std::string getOutput(void* buf, platform::int64 offset,
-      platform::int64 idx) override {
+  void init(void* buf) override {
     platform::float32* tmp_buf = (platform::float32*)buf;
-    return std::to_string(idx) + "\t" + std::to_string(tmp_buf[offset>>2]) +
-           "\n";
+    tmp_buf[0] = 1.0;
+    tmp_buf[1] = 0.0;
+  }
+
+  std::string getOutput(void* buf, platform::int64 idx) override {
+    platform::float32* tmp_buf = (platform::float32*)buf;
+    return std::to_string(idx) + "\t" + std::to_string(tmp_buf[0]) + "\n";
   }
 };
 
@@ -88,6 +78,7 @@ public:
 } // example
 
 int main(int argc, char* argv[]) {
+  LOG(util::INFO) << "this is an example of how to use toy-graph.";
   util::CommandLine cmdl = util::CommandLine();
   cmdl.addOption("input").addOption("output").addOption("vertexNum")
       .addOption("edgeNum").addOption("iterations");

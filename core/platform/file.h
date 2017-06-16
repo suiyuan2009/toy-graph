@@ -18,9 +18,8 @@ public:
   PosixFile & operator=(const PosixFile& pf) = delete;
   PosixFile(std::string& path);
   virtual ~PosixFile() override;
-  virtual void sequentialRead(void* buffer, int size, int& bytes_read)
-      override {};
-  virtual void write(std::string& str) override {};
+  virtual void sequentialRead(void*, int, int&) override {};
+  virtual void write(std::string&) override {};
 protected:
   char* filePath;
   int fd;

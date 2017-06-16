@@ -21,13 +21,18 @@ SimpleReader::~SimpleReader() {
   delete(file);
 }
 
-bool SimpleReader::get(EdgeInterface* edge) {
+bool SimpleReader::readInToEdge(EdgeInterface* edge) {
   if (offset >= readerBufSize) {
     file->sequentialRead(buf, readerBufSize, bufSize);
     if (bufSize == 0) return false;
     offset = 0;
   }
-  return edge->read(buf, bufSize, offset);
+  if (offset + oneEdgeSize > bufSize) {
+    return false;
+  }
+  edge->read((char*)buf + offset);
+  offset += oneEdgeSize;
+  return true;
 }
 
 void SimpleReader::reset() {

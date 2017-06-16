@@ -62,9 +62,7 @@ SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
 template <class MessageT, class EdgeT, class VertexT>
 void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
   LOG(util::INFO)<<"start init every vertex.";
-  for (platform::int64 i = 0; i < graph->getVertexNum(); i++) {
-    graph->initOneVertex(i);
-  }
+  graph->initAllVertex();
   LOG(util::INFO)<<"finish init every vertex, start run computation.";
   for (int i = 1; i <= iteration; i++) {
     LOG(util::INFO) << "reset reader to read data from beginning again.";
@@ -75,7 +73,7 @@ void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
     platform::int64 edgeNumDEBUG = 0;
     int processPercent = 0;
     platform::int64 percent = graph->getEdgeNum() / 100;
-    while (reader->get(edge)) {
+    while (reader->readInToEdge(edge)) {
       edge->scatter(graph, msg);
       edgeNumDEBUG++;
       if (edgeNumDEBUG == percent) {

@@ -10,15 +10,12 @@ namespace framework {
 
 class VertexInterface {
 public:
-  virtual void update(void* buf, platform::int64 offset) = 0;
-  virtual void initOneVertex(void* buf, platform::int64 offset) = 0;
-  virtual void gather(void* buf, platform::int64 offset,
-      MessageInterface* msg) = 0;
-  virtual void get(void* buf, platform::int64 offset,
-      MessageInterface* msg) = 0;
+  virtual void update(void* buf) = 0;
+  virtual void init(void* buf) = 0;
+  virtual void gather(void* buf, MessageInterface* msg) = 0;
+  virtual void getValue(void* buf, MessageInterface* msg) = 0;
   virtual ~VertexInterface() {}
-  virtual std::string getOutput(void* buf, platform::int64 offset,
-      platform::int64 idx) = 0;
+  virtual std::string getOutput(void* buf, platform::int64 idx) = 0;
 };
 
 }

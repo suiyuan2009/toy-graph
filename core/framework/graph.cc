@@ -23,11 +23,8 @@ GraphInterface::~GraphInterface() {
   platform::Free(vertexBuf);
 }
 
-SimpleGraph::SimpleGraph(platform::int64 vNum, platform::int64 eNum, int ovs):
-    GraphInterface(vNum, eNum, ovs) {
-}
-
-void SimpleGraph::setVertex(VertexInterface* v) {
+SimpleGraph::SimpleGraph(platform::int64 vNum, platform::int64 eNum, int ovs,
+    VertexInterface* v) : GraphInterface(vNum, eNum, ovs) {
   vertex = v;
 }
 
@@ -36,24 +33,22 @@ SimpleGraph::~SimpleGraph() {
 }
 
 void SimpleGraph::scatter(platform::int64 idx, MessageInterface* msg) {
-  vertex->gather(vertexBuf, idx * oneVertexSize, msg);
+  vertex->gather((char*)vertexBuf + idx * oneVertexSize, msg);
 }
 
-void SimpleGraph::updateOneVertex(platform::int64 idx) {
-  vertex->update(vertexBuf, idx * oneVertexSize);
-}
-
-void SimpleGraph::initOneVertex(platform::int64 idx) {
-  vertex->initOneVertex(vertexBuf, idx * oneVertexSize);
+void SimpleGraph::initAllVertex() {
+  for (platform::int64 idx = 0; idx < vertexNum; idx++) {
+    vertex->init((char*)vertexBuf + idx * oneVertexSize);
+  }
 }
 
 void SimpleGraph::getVertexInfo(platform::int64 idx, MessageInterface* msg) {
-  vertex->get(vertexBuf, idx * oneVertexSize, msg);
+  vertex->getValue((char*)vertexBuf + idx * oneVertexSize, msg);
 }
 
 void SimpleGraph::updateAllVertex() {
   for (platform::int64 i = 0; i < vertexNum; i++) {
-    updateOneVertex(i);
+    vertex->update((char*)vertexBuf + i * oneVertexSize);
   }
 }
 
@@ -66,7 +61,7 @@ platform::int64 SimpleGraph::getVertexNum() {
 }
 
 std::string SimpleGraph::getVertexOutput(platform::int64 idx) {
-  return vertex->getOutput(vertexBuf, idx * oneVertexSize, idx);
+  return vertex->getOutput((char*)vertexBuf + idx * oneVertexSize, idx);
 }
 
 }

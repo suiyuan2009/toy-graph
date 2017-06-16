@@ -26,9 +26,8 @@ public:
 template <class VertexT>
 GraphInterface* SimpleGraphBuilder<VertexT>::build(platform::int64 vertexNum,
     platform::int64 edgeNum, int ovs) {
-  SimpleGraph* simpleGraph = new SimpleGraph(vertexNum, edgeNum, ovs);
   VertexInterface* vertex = new VertexT();
-  simpleGraph->setVertex(vertex);
+  SimpleGraph* simpleGraph = new SimpleGraph(vertexNum, edgeNum, ovs, vertex);
   return simpleGraph;
 }
 
