@@ -9,7 +9,7 @@ namespace util {
 
 class CommandLine {
 public:
-  CommandLine* addOption(std::string opt);
+  CommandLine& addOption(std::string opt);
   std::string getOptVal(std::string opt);
   void parseCommandLine(int argc, char* argv[]);
 private:

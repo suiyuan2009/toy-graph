@@ -14,7 +14,8 @@ GraphInterface::GraphInterface(platform::int64 vNum, platform::int64 eNum,
   oneVertexSize = ovs;
   vertexNum = vNum, edgeNum = eNum;
   vertexBufSize = oneVertexSize * vNum;
-  LOG(util::DEBUG) << "vertex buf size is " << vertexBufSize;
+  LOG(util::INFO) << "vertex buf size is " << vertexBufSize
+                  << ", this is where to save vertex info during computation.";
   vertexBuf = platform::Malloc(vertexBufSize);
 }
 

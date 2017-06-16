@@ -31,9 +31,7 @@ bool SimpleReader::get(EdgeInterface* edge) {
 }
 
 void SimpleReader::reset() {
-  LOG(util::DEBUG) << "try to close file first";
   delete(file);
-  LOG(util::DEBUG) << "delete file, try to reset";
   file = new platform::PosixReadFile(filePath);
   offset = readerBufSize;
   bufSize = 0;

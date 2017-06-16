@@ -51,10 +51,10 @@ SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
   outputFile = outputPath;
   std::unique_ptr<framework::GraphBuilderInterface> gbuild(new
       framework::SimpleGraphBuilder<VertexT>());
-  LOG(util::DEBUG)<<"start build graph, vertex num is "<<vertexNum<<
-      ", edge num is "<<edgeNum;
+  LOG(util::INFO)<<"start build graph, vertex num is "<<vertexNum<<
+      ", edge num is "<<edgeNum <<", one vertex size is " << oneVertexSize
+      << ", one edge size is " << oneEdgeSize;
   graph = gbuild->build(vertexNum, edgeNum, oneVertexSize);
-  LOG(util::DEBUG) << "graph built";
   reader = new framework::SimpleReader(inputFile, oneEdgeSize);
   writer = new framework::SimpleWriter(outputFile);
 };
@@ -65,36 +65,38 @@ void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
   for (platform::int64 i = 0; i < graph->getVertexNum(); i++) {
     graph->initOneVertex(i);
   }
-  LOG(util::INFO)<<"finish init every vertex.";
-  LOG(util::INFO) << "start run computation.";
+  LOG(util::INFO)<<"finish init every vertex, start run computation.";
   for (int i = 1; i <= iteration; i++) {
-    LOG(util::DEBUG) << "try to reset reader.";
+    LOG(util::INFO) << "reset reader to read data from beginning again.";
     reader->reset();
-    LOG(util::DEBUG)<<"start iteration: "<<i;
+    LOG(util::INFO)<<"start iteration: "<<i;
     framework::EdgeInterface* edge = new EdgeT();
     framework::MessageInterface* msg = new MessageT();
     platform::int64 edgeNumDEBUG = 0;
     int processPercent = 0;
     platform::int64 percent = graph->getEdgeNum() / 100;
-    LOG(util::DEBUG)<<"edge percent is "<<percent;
     while (reader->get(edge)) {
       edge->scatter(graph, msg);
       edgeNumDEBUG++;
       if (edgeNumDEBUG == percent) {
         processPercent++;
         edgeNumDEBUG = 0;
-        LOG(util::INFO)<<"process %"<<processPercent<<" edges";
+        LOG(util::INFO) << "iteration " << i
+                        << " processed %" << processPercent << " edges";
       }
     }
-    LOG(util::DEBUG)<<"process %100 edges"<< std::endl;
+    LOG(util::INFO)<<"finished edge process";
     delete(edge);
     delete(msg);
+    LOG(util::INFO)<<"start updating each vertex";
     graph->updateAllVertex();
-    LOG(util::DEBUG)<<"finish iteration: "<<i;
+    LOG(util::INFO)<<"finish iteration: "<<i;
   }
+  LOG(util::INFO)<<"finished computation, start saving to file.";
   for (platform::int64 i = 0; i < graph->getVertexNum(); i++) {
     writer->write(graph->getVertexOutput(i));
   }
+  LOG(util::INFO)<<"result saved, finished.";
 };
 
 }

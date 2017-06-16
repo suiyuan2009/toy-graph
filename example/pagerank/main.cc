@@ -40,9 +40,6 @@ public:
       framework::MessageInterface* msg) override {
     g->getVertexInfo(src_idx, msg);
     Message* tmp = (Message*)msg;
-    //LOG(util::DEBUG) << "edge scatter function, message value is "
-    //                 << tmp->msg << "src degree is "
-    //                 << src_degree << std::endl;
     tmp->msg = tmp->msg * 1.0 / src_degree;
     g->scatter(dst_idx, tmp);
   }
@@ -57,6 +54,7 @@ public:
   void update(void* buf, platform::int64 offset) override {
     platform::float32* tmp_buf = (platform::float32*)buf;
     tmp_buf[offset>>2] = tmp_buf[(offset>>2)+ 1] * 0.85 + 0.15;
+    tmp_buf[(offset>>2) + 1] = 0;
   }
 
   void get(void* buf, platform::int64 offset,
@@ -70,8 +68,6 @@ public:
       framework::MessageInterface* msg) override {
     platform::float32* tmp_buf = (platform::float32*)buf;
     Message* tmp = (Message*)msg;
-    //LOG(util::DEBUG) << "vertex gather function, message value is "
-    //                 << tmp->msg << std::endl;
     tmp_buf[(offset>>2) + 1] += tmp->msg;
   }
   void initOneVertex(void* buf, platform::int64 offset) override {
@@ -92,22 +88,20 @@ public:
 } // example
 
 int main(int argc, char* argv[]) {
-  util::CommandLine* cmdl = new util::CommandLine();
-  cmdl->addOption("input")->addOption("output")->addOption("vertexNum")
-      ->addOption("edgeNum")->addOption("iterations");
-  cmdl->parseCommandLine(argc, argv);
-  std::string inputPath = cmdl->getOptVal("input");
-  std::string outputPath = cmdl->getOptVal("output");
-  platform::int64 vNum = std::stoll(cmdl->getOptVal("vertexNum"));
-  platform::int64 eNum = std::stoll(cmdl->getOptVal("edgeNum"));
-  int iteration = std::stoi(cmdl->getOptVal("iterations"));
+  util::CommandLine cmdl = util::CommandLine();
+  cmdl.addOption("input").addOption("output").addOption("vertexNum")
+      .addOption("edgeNum").addOption("iterations");
+  cmdl.parseCommandLine(argc, argv);
+  std::string inputPath = cmdl.getOptVal("input");
+  std::string outputPath = cmdl.getOptVal("output");
+  platform::int64 vNum = std::stoll(cmdl.getOptVal("vertexNum"));
+  platform::int64 eNum = std::stoll(cmdl.getOptVal("edgeNum"));
+  int iteration = std::stoi(cmdl.getOptVal("iterations"));
   int oneVertexSize = 8, oneEdgeSize = 12;
-  runtime::RunnerInterface* runner = new runtime::SimpleRunner<
+  std::unique_ptr<runtime::RunnerInterface> runner(new runtime::SimpleRunner<
       example::pagerank::Message, example::pagerank::Edge,
           example::pagerank::Vertex>(vNum, eNum, inputPath, outputPath,
-              oneVertexSize, oneEdgeSize);
+              oneVertexSize, oneEdgeSize));
   runner->run(iteration);
-  delete(runner);
-  delete(cmdl);
   return 0;
 }

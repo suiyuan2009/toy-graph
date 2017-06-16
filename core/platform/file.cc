@@ -27,6 +27,8 @@ PosixReadFile::PosixReadFile(std::string& path) : PosixFile(path) {
   fd = open(filePath, O_RDONLY);
   if (fd == -1) {
     LOG(util::ERROR) << "file " << filePath << " can't be opened!";
+  } else {
+    LOG(util::INFO) << "file " << filePath << " success opened to read.";
   }
 }
 
@@ -40,20 +42,16 @@ void PosixReadFile::sequentialRead(void* buffer, int size, int& bytes_read) {
 
 PosixAppendWriteFile::PosixAppendWriteFile(std::string& path)
     : PosixFile(path) {
-  LOG(util::DEBUG) << "try to open " << path << "to write.";
-  fd = open(filePath, O_WRONLY | O_APPEND | O_CREAT, 0666);
+  fd = open(filePath, O_WRONLY | O_CREAT, 0666);
   if (fd == -1) {
     LOG(util::ERROR) << "file " << filePath << " can't be opened!";
   } else {
-    LOG(util::INFO) << "file " << path << " success open.";
+    LOG(util::INFO) << "file " << path << " success opened to write.";
   }
 }
 
 void PosixAppendWriteFile::write(std::string& str) {
-  //LOG(util::DEBUG) << "need to write " << str.size();
-  //usleep(100000);
   char* tmp = (char*)Malloc(str.size() * sizeof(char) + 1);
-  //LOG(util::DEBUG) << "malloc success";
   strcpy(tmp, str.c_str());
   int debug;
   if ((debug = ::write(fd, tmp, str.size())) != (int)str.size()) {
