@@ -20,6 +20,9 @@ public:
   virtual platform::int64 getEdgeNum() = 0;
   virtual platform::int64 getVertexNum() = 0;
   virtual ~GraphInterface();
+  GraphInterface() = delete;
+  GraphInterface& operator=(const GraphInterface& g) = delete;
+  GraphInterface(const GraphInterface& g) = delete;
 protected:
   platform::int64 vertexNum, edgeNum, vertexBufSize;
   void* vertexBuf;
@@ -30,9 +33,6 @@ class SimpleGraph : public GraphInterface {
 public:
   SimpleGraph(platform::int64 vNum, platform::int64 eNum, int initOneVertex,
              VertexInterface* v);
-  SimpleGraph() = delete;
-  SimpleGraph(const SimpleGraph& sg) = delete;
-  SimpleGraph& operator=(const SimpleGraph& sg) = delete;
   ~SimpleGraph() override;
   void updateAllVertex() override;
   void initAllVertex() override;

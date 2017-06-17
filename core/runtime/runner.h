@@ -18,6 +18,9 @@ class RunnerInterface {
 public:
   virtual void run(int iteration) = 0;
   virtual ~RunnerInterface();
+  RunnerInterface() = delete;
+  RunnerInterface(const RunnerInterface& r) = delete;
+  RunnerInterface& operator=(const RunnerInterface& r) = delete;
 protected:
   framework::GraphInterface* graph;
   framework::ReaderInterface* reader;

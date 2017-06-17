@@ -12,7 +12,6 @@ protected:
   }
 
   virtual void TearDown() {
-    delete(q);
   }
 
   void producer(int size) {

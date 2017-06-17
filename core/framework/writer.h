@@ -12,6 +12,9 @@ class WriterInterface {
 public:
   virtual ~WriterInterface() {};
   virtual void write(std::string str) = 0;
+  WriterInterface() = delete;
+  WriterInterface(const WriterInterface& w) = delete;
+  WriterInterface& operator=(const WriterInterface& w) = delete;
 };
 
 const int writerBufSize = 1024;

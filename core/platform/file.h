@@ -9,13 +9,13 @@ public:
   virtual ~FileInterface() {};
   virtual void sequentialRead(void* buffer, int size, int& bytes_read) = 0;
   virtual void write(std::string& str) = 0;
+  FileInterface() = delete;
+  FileInterface& operator(const FileInterface& f) = delete;
+  FileInterface(const FileInterface& f) = delete;
 };
 
 class PosixFile : public FileInterface {
 public:
-  PosixFile() = delete;
-  PosixFile(const PosixFile& pf) = delete;
-  PosixFile & operator=(const PosixFile& pf) = delete;
   PosixFile(std::string& path);
   virtual ~PosixFile() override;
   virtual void sequentialRead(void*, int, int&) override {};

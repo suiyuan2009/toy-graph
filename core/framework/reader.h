@@ -14,14 +14,14 @@ public:
   virtual bool readInToEdge(EdgeInterface* edge) = 0;
   virtual void reset() = 0;
   virtual ~ReaderInterface() {};
+  ReaderInterface() = delete;
+  ReaderInterface(const ReaderInterface& r) = delete;
+  ReaderInterface& operator=(const ReaderInterface& r) = delete;
 };
 
 class SimpleReader : public ReaderInterface {
 public:
-  SimpleReader() = delete;
   ~SimpleReader() override;
-  SimpleReader(const SimpleReader& r) = delete;
-  SimpleReader& operator=(const SimpleReader& r) = delete;
   SimpleReader(std::string filePath, int oes, int bufSize = 100);
   bool readInToEdge(EdgeInterface* edge) override;
   void reset() override;

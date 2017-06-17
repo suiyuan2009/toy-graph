@@ -15,6 +15,9 @@ public:
   virtual void push(T& item) = 0;
   virtual T pop() = 0;
   virtual ~QueueInterface(){};
+  QueueInterface() {}
+  QueueInterface(const QueueInterface& q) = delete;
+  QueueInterface& operator=(const QueueInterface& q) = delete;
 };
 
 template <class T>
