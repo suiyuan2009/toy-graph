@@ -46,7 +46,7 @@ finally we get
 `test/pagerank_test_graph.pagerank` result file, each line is
 `vertex_index pagerank_value` format.
 
-# system requirements
+# system requirements(only linux tested)
 
 Currently `toy-graph` supports single machine vertex in memory & pull
 computation, memory cost is each vertex cost * num_of_vertex. There is no disk
@@ -70,3 +70,4 @@ We leave each vertex memory management to user themselves.
 2. support push computation model.
 3. add unit test(current only `commandline` tool has unit test),
   add code comments.
+4. support multi platforms, system environment detect.
