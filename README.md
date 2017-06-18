@@ -1,7 +1,7 @@
 # introduction
 
-`toy-graph` is a purely c++ CPU based graph computing system aiming to support
-billions vertexes.
+`toy-graph` is a purely c++ CPU based multithreading graph computing system
+aiming to support billions vertexes.
 
 # quick start
 
@@ -66,8 +66,7 @@ We leave each vertex memory management to user themselves.
 
 # road map
 
-1. support multi-thread, incluing i/o and computation.
+1. support multi-thread computation.
 2. support push computation model.
-3. add unit test(current only `commandline` tool has unit test),
-  add code comments.
-4. support multi platforms, system environment detect.
+3. add more unit test, add code comments, add docs.
+4. support multi platforms.
