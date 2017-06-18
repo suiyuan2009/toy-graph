@@ -14,6 +14,8 @@ public:
   ThreadInterface(){}
   ThreadInterface(const ThreadInterface& t) = delete;
   ThreadInterface& operator=(const ThreadInterface& t) = delete;
+protected:
+  bool started;
 };
 
 template <typename T>
@@ -30,16 +32,21 @@ private:
 template <typename T>
 SimpleThread<T>::SimpleThread(std::function<T> f) {
   func = f;
+  started = false;
 }
 
 template <typename T>
 void SimpleThread<T>::start() {
   th=std::thread(func);
+  started = true;
 }
 
 template <typename T>
 void SimpleThread<T>::join() {
-  th.join();
+  if (started) {
+    th.join();
+    started = false;
+  }
 }
 
 }

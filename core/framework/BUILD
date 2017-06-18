@@ -2,7 +2,8 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
   name = "framework",
-  deps = ["edge",
+  deps = ["async_reader",
+          "edge",
           "vertex",
           "reader",
           "writer",
@@ -39,6 +40,15 @@ cc_library(
           "//core/platform:file",
           "//core/util:logging",
           ],
+)
+
+cc_library(
+  name = "async_reader",
+  hdrs = ["async_reader.h"],
+  linkopts = ["-lpthread"],
+  deps = [":reader",
+          "//core/lib:queue",
+          "//core/lib:thread"],
 )
 
 cc_library(

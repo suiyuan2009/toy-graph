@@ -12,7 +12,7 @@ class WriterInterface {
 public:
   virtual ~WriterInterface() {};
   virtual void write(std::string str) = 0;
-  WriterInterface() = delete;
+  WriterInterface(){};
   WriterInterface(const WriterInterface& w) = delete;
   WriterInterface& operator=(const WriterInterface& w) = delete;
 };

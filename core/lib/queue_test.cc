@@ -9,7 +9,7 @@ class QueueTest : public testing::Test {
 protected:
 
   virtual void SetUp() {
-    q = new lib::FixedSizeQueue<int>(100000);
+    q = new lib::FixedSizeQueue<int>(1000);
   }
 
   virtual void TearDown() {
@@ -20,11 +20,13 @@ protected:
       int x = i;
       q->push(x);
     }
+    q->stop();
   }
 
-  void consumer(int size) {
-    for (int i = 0; i < size; i++) {
-      result.push_back(q->pop());
+  void consumer() {
+    int x;
+    while (q->pop(x)) {
+      result.push_back(x);
     }
   }
 
@@ -32,7 +34,7 @@ protected:
     lib::ThreadInterface* p = new lib::SimpleThread<void()>(
         std::bind(&QueueTest::producer, this, size));
     lib::ThreadInterface* c = new lib::SimpleThread<void()>(
-        std::bind(&QueueTest::consumer, this, size));
+        std::bind(&QueueTest::consumer, this));
     p->start();
     c->start();
     p->join();

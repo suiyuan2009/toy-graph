@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 
+#include "core/framework/async_reader.h"
 #include "core/framework/graph.h"
 #include "core/framework/graph_builder.h"
 #include "core/framework/reader.h"
@@ -18,7 +19,7 @@ class RunnerInterface {
 public:
   virtual void run(int iteration) = 0;
   virtual ~RunnerInterface();
-  RunnerInterface() = delete;
+  RunnerInterface(){};
   RunnerInterface(const RunnerInterface& r) = delete;
   RunnerInterface& operator=(const RunnerInterface& r) = delete;
 protected:
@@ -58,7 +59,7 @@ SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
       ", edge num is "<<edgeNum <<", one vertex size is " << oneVertexSize
       << ", one edge size is " << oneEdgeSize;
   graph = gbuild->build(vertexNum, edgeNum, oneVertexSize);
-  reader = new framework::SimpleReader(inputFile, oneEdgeSize);
+  reader = new framework::AsyncReader<EdgeT>(inputFile, oneEdgeSize);
   writer = new framework::SimpleWriter(outputFile);
 };
 
@@ -70,23 +71,28 @@ void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
   for (int i = 1; i <= iteration; i++) {
     LOG(util::INFO) << "reset reader to read data from beginning again.";
     reader->reset();
+    LOG(util::DEBUG) << "reader finished reset.";
+    reader->start();
+    LOG(util::DEBUG) << "reader starts!";
     LOG(util::INFO)<<"start iteration: "<<i;
     framework::EdgeInterface* edge = new EdgeT();
     framework::MessageInterface* msg = new MessageT();
-    platform::int64 edgeNumDEBUG = 0;
+    platform::int64 edgeNumDEBUG = 0, percentCount = 0;
     int processPercent = 0;
     platform::int64 percent = graph->getEdgeNum() / 100;
     while (reader->readInToEdge(edge)) {
       edge->scatter(graph, msg);
       edgeNumDEBUG++;
-      if (edgeNumDEBUG == percent) {
+      percentCount++;
+      if (percentCount == percent) {
         processPercent++;
-        edgeNumDEBUG = 0;
+        percentCount = 0;
         LOG(util::INFO) << "iteration " << i
                         << " processed %" << processPercent << " edges";
       }
     }
-    LOG(util::INFO)<<"finished edge process";
+    LOG(util::INFO)<<"finished edge process, " << edgeNumDEBUG <<
+        " edges processed.";
     delete(edge);
     delete(msg);
     LOG(util::INFO)<<"start updating each vertex";

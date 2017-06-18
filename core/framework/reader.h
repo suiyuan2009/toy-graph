@@ -13,8 +13,9 @@ class ReaderInterface {
 public:
   virtual bool readInToEdge(EdgeInterface* edge) = 0;
   virtual void reset() = 0;
+  virtual void start() = 0;
   virtual ~ReaderInterface() {};
-  ReaderInterface() = delete;
+  ReaderInterface(){}
   ReaderInterface(const ReaderInterface& r) = delete;
   ReaderInterface& operator=(const ReaderInterface& r) = delete;
 };
@@ -22,10 +23,11 @@ public:
 class SimpleReader : public ReaderInterface {
 public:
   ~SimpleReader() override;
-  SimpleReader(std::string filePath, int oes, int bufSize = 100);
-  bool readInToEdge(EdgeInterface* edge) override;
-  void reset() override;
-private:
+  SimpleReader(std::string filePath, int oneEdgeSize, int bufSize = 100);
+  virtual bool readInToEdge(EdgeInterface* edge) override;
+  virtual void reset() override;
+  virtual void start() override {}
+protected:
   platform::FileInterface* file;
   void* buf;
   int readerBufSize; // size of buf

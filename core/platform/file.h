@@ -9,8 +9,8 @@ public:
   virtual ~FileInterface() {};
   virtual void sequentialRead(void* buffer, int size, int& bytes_read) = 0;
   virtual void write(std::string& str) = 0;
-  FileInterface() = delete;
-  FileInterface& operator(const FileInterface& f) = delete;
+  FileInterface(){}
+  FileInterface& operator=(const FileInterface& f) = delete;
   FileInterface(const FileInterface& f) = delete;
 };
 
