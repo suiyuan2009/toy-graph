@@ -36,7 +36,7 @@ public:
   void run(int iteration);
   SimpleRunner(platform::int64 vertexNum, platform::int64 edgeNum,
       std::string inputPath, std::string outputPath, int oneVertexSize,
-      int oneEdgeSize, int bucketSize = 1000);
+      int oneEdgeSize, int bucketSize = 10000);
 private:
   std::string inputFile;
   std::string outputFile;

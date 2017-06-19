@@ -15,7 +15,7 @@ template <class T>
 class AsyncReader : public SimpleReader {
 public:
   AsyncReader(std::string filePath, int oneEdgeSize, int bufSize = 100,
-      int queueSize = 1000, int bucketSize = 1000);
+      int queueSize = 10, int bucketSize = 10000);
   ~AsyncReader() override;
   bool readInToEdge(std::vector<EdgeInterface*>& edges, int& size) override;
   void reset() override;

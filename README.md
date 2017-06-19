@@ -66,7 +66,7 @@ We leave each vertex memory management to user themselves.
 
 # road map
 
-1. support multi-thread computation.
+1. support multi-thread computation(partition edges).
 2. support push computation model.
 3. add more unit test, add code comments, add docs.
 4. support multi platforms.
