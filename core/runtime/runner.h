@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "core/framework/async_reader.h"
 #include "core/framework/graph.h"
@@ -35,10 +36,11 @@ public:
   void run(int iteration);
   SimpleRunner(platform::int64 vertexNum, platform::int64 edgeNum,
       std::string inputPath, std::string outputPath, int oneVertexSize,
-      int oneEdgeSize);
+      int oneEdgeSize, int bucketSize = 1000);
 private:
   std::string inputFile;
   std::string outputFile;
+  int bucketSize; // for reader
 };
 
 RunnerInterface::~RunnerInterface() {
@@ -50,9 +52,10 @@ RunnerInterface::~RunnerInterface() {
 template <class MessageT, class EdgeT, class VertexT>
 SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
     platform::int64 edgeNum, std::string inputPath, std::string outputPath,
-    int oneVertexSize, int oneEdgeSize) {
+    int oneVertexSize, int oneEdgeSize, int bs) {
   inputFile = inputPath;
   outputFile = outputPath;
+  bucketSize = bs;
   std::unique_ptr<framework::GraphBuilderInterface> gbuild(new
       framework::SimpleGraphBuilder<VertexT>());
   LOG(util::INFO)<<"start build graph, vertex num is "<<vertexNum<<
@@ -68,6 +71,11 @@ void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
   LOG(util::INFO)<<"start init every vertex.";
   graph->initAllVertex();
   LOG(util::INFO)<<"finish init every vertex, start run computation.";
+  std::vector<framework::EdgeInterface*> edges(bucketSize);
+  for (int i = 0; i < bucketSize; i++) {
+    edges[i] = new EdgeT();
+  }
+  framework::MessageInterface* msg = new MessageT();
   for (int i = 1; i <= iteration; i++) {
     LOG(util::INFO) << "reset reader to read data from beginning again.";
     reader->reset();
@@ -75,30 +83,33 @@ void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
     reader->start();
     LOG(util::DEBUG) << "reader starts!";
     LOG(util::INFO)<<"start iteration: "<<i;
-    framework::EdgeInterface* edge = new EdgeT();
-    framework::MessageInterface* msg = new MessageT();
     platform::int64 edgeNumDEBUG = 0, percentCount = 0;
     int processPercent = 0;
     platform::int64 percent = graph->getEdgeNum() / 100;
-    while (reader->readInToEdge(edge)) {
-      edge->scatter(graph, msg);
-      edgeNumDEBUG++;
-      percentCount++;
-      if (percentCount == percent) {
-        processPercent++;
-        percentCount = 0;
-        LOG(util::INFO) << "iteration " << i
-                        << " processed %" << processPercent << " edges";
+    int edgeNum;
+    while (reader->readInToEdge(edges, edgeNum)) {
+      for (int j =0; j < edgeNum; j++) {
+        edges[j]->scatter(graph, msg);
+        edgeNumDEBUG++;
+        percentCount++;
+        if (percentCount == percent) {
+          processPercent++;
+          percentCount = 0;
+          LOG(util::INFO) << "iteration " << i
+                          << " processed %" << processPercent << " edges";
+        }
       }
     }
     LOG(util::INFO)<<"finished edge process, " << edgeNumDEBUG <<
         " edges processed.";
-    delete(edge);
-    delete(msg);
     LOG(util::INFO)<<"start updating each vertex";
     graph->updateAllVertex();
     LOG(util::INFO)<<"finish iteration: "<<i;
   }
+  for (int i = 0; i < bucketSize; i++) {
+    delete(edges[i]);
+  }
+  delete(msg);
   LOG(util::INFO)<<"finished computation, start saving to file.";
   for (platform::int64 i = 0; i < graph->getVertexNum(); i++) {
     writer->write(graph->getVertexOutput(i));

@@ -3,6 +3,7 @@
 
 #include <queue>
 #include <string>
+#include <vector>
 
 #include "core/framework/edge.h"
 #include "core/platform/file.h"
@@ -12,6 +13,7 @@ namespace framework {
 class ReaderInterface {
 public:
   virtual bool readInToEdge(EdgeInterface* edge) = 0;
+  virtual bool readInToEdge(std::vector<EdgeInterface*>& edges, int& size) = 0;
   virtual void reset() = 0;
   virtual void start() = 0;
   virtual ~ReaderInterface() {};
@@ -25,6 +27,8 @@ public:
   ~SimpleReader() override;
   SimpleReader(std::string filePath, int oneEdgeSize, int bufSize = 100);
   virtual bool readInToEdge(EdgeInterface* edge) override;
+  virtual bool readInToEdge(std::vector<EdgeInterface*>& edges,
+      int& size) override;
   virtual void reset() override;
   virtual void start() override {}
 protected:

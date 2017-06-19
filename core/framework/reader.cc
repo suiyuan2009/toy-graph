@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 
 #include "core/framework/reader.h"
 #include "core/platform/malloc.h"
@@ -33,6 +34,12 @@ bool SimpleReader::readInToEdge(EdgeInterface* edge) {
   edge->read((char*)buf + offset);
   offset += oneEdgeSize;
   return true;
+}
+
+bool SimpleReader::readInToEdge(std::vector<EdgeInterface*>&, int&) {
+  LOG(util::ERROR) <<
+      "readInToEdge(std::vector<EdgeInterface*>, int&) is not implemented!";
+  return false;
 }
 
 void SimpleReader::reset() {

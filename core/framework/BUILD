@@ -48,7 +48,8 @@ cc_library(
   linkopts = ["-lpthread"],
   deps = [":reader",
           "//core/lib:queue",
-          "//core/lib:thread"],
+          "//core/lib:thread",
+          "//core/lib:bucket"],
 )
 
 cc_library(

@@ -26,7 +26,7 @@ protected:
 template <class T>
 class FixedSizeQueue : public QueueInterface<T> {
 public:
-  FixedSizeQueue(int size);
+  FixedSizeQueue(int size, T initValue);
   void push(T& item) override;
   bool pop(T& item) override;
   void stop() override;
@@ -39,12 +39,12 @@ private:
 };
 
 template <class T>
-FixedSizeQueue<T>::FixedSizeQueue(int size) {
+FixedSizeQueue<T>::FixedSizeQueue(int size, T initValue) {
   if (size <= 0) {
     LOG(util::ERROR) << "FixedSizeQueue's size must be more than 0.";
   }
   qSize = size;
-  q = std::vector<T>(qSize);
+  q = std::vector<T>(qSize, initValue);
   qFront = qEnd = countItem = 0;
   QueueInterface<T>::isStop = false;
 }
