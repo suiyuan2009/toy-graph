@@ -8,7 +8,17 @@ cc_library(
 
 cc_library(
   name = "thread",
+  srcs = ["thread.cc"],
   hdrs = ["thread.h"],
+)
+
+cc_library(
+  name = "thread_pool",
+  srcs = ["thread_pool.cc"],
+  hdrs = ["thread_pool.h"],
+  deps = [":queue",
+          ":thread",
+          "//core/util:logging"],
 )
 
 cc_library(

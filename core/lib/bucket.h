@@ -7,6 +7,7 @@
 
 namespace lib {
 
+// this class allows copy constructor.
 template <class T>
 class Bucket {
 public:

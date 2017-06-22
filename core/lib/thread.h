@@ -18,36 +18,15 @@ protected:
   bool started;
 };
 
-template <typename T>
 class SimpleThread : public ThreadInterface {
 public:
   void start() override;
   void join() override;
-  SimpleThread(std::function<T> f);
+  SimpleThread(std::function<void()> f);
 private:
-  std::function<T> func;
+  std::function<void()> func;
   std::thread th;
 };
-
-template <typename T>
-SimpleThread<T>::SimpleThread(std::function<T> f) {
-  func = f;
-  started = false;
-}
-
-template <typename T>
-void SimpleThread<T>::start() {
-  th=std::thread(func);
-  started = true;
-}
-
-template <typename T>
-void SimpleThread<T>::join() {
-  if (started) {
-    th.join();
-    started = false;
-  }
-}
 
 }
 #endif

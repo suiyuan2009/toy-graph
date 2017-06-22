@@ -26,7 +26,7 @@ protected:
 template <class T>
 class FixedSizeQueue : public QueueInterface<T> {
 public:
-  FixedSizeQueue(int size, T initValue);
+  FixedSizeQueue(int size, T initValue = T());
   void push(T& item) override;
   bool pop(T& item) override;
   void stop() override;

@@ -12,8 +12,7 @@ protected:
     q = new lib::FixedSizeQueue<int>(1000);
   }
 
-  virtual void TearDown() {
-  }
+  virtual void TearDown() {}
 
   void producer(int size) {
     for (int i = 0; i < size; i++) {
@@ -31,9 +30,9 @@ protected:
   }
 
   void Test(int size) {
-    lib::ThreadInterface* p = new lib::SimpleThread<void()>(
+    lib::ThreadInterface* p = new lib::SimpleThread(
         std::bind(&QueueTest::producer, this, size));
-    lib::ThreadInterface* c = new lib::SimpleThread<void()>(
+    lib::ThreadInterface* c = new lib::SimpleThread(
         std::bind(&QueueTest::consumer, this));
     p->start();
     c->start();

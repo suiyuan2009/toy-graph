@@ -35,7 +35,7 @@ AsyncReader<T>::AsyncReader(std::string filePath, int oneEdgeSize, int bufSize,
   bucketSize = bs;
   q = new lib::FixedSizeQueue<lib::Bucket<T>>(queueSize,
       lib::Bucket<T>(bucketSize));
-  reader = new lib::SimpleThread<void()>(
+  reader = new lib::SimpleThread(
       std::bind(&AsyncReader<T>::readerThread, this));
   tmpBucket = lib::Bucket<T>(bucketSize);
 }
@@ -111,7 +111,7 @@ void AsyncReader<T>::reset() {
   SimpleReader::reset();
   q = new lib::FixedSizeQueue<lib::Bucket<T>>(queueSize,
       lib::Bucket<T>(bucketSize));
-  reader = new lib::SimpleThread<void()>(
+  reader = new lib::SimpleThread(
       std::bind(&AsyncReader<T>::readerThread, this));
 }
 
