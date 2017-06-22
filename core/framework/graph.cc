@@ -28,7 +28,7 @@ SimpleGraph::SimpleGraph(platform::int64 vNum, platform::int64 eNum, int ovs,
   vertex = v;
   use_locking = _use_locking;
   if (use_locking) {
-    mtx = std::vector<std::mutex>(vNum);
+    mtx = std::vector<std::mutex>(1000003);
   }
 }
 
@@ -38,7 +38,7 @@ SimpleGraph::~SimpleGraph() {
 
 void SimpleGraph::scatter(platform::int64 idx, MessageInterface* msg) {
   if (use_locking) {
-    std::unique_lock<std::mutex> ulock(mtx[idx]);
+    std::unique_lock<std::mutex> ulock(mtx[idx%1000003]);
     vertex->gather((char*)vertexBuf + idx * oneVertexSize, msg);
   } else {
     vertex->gather((char*)vertexBuf + idx * oneVertexSize, msg);
