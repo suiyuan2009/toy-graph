@@ -19,6 +19,7 @@ ThreadPool::~ThreadPool() {
   q->stop();
   for (int i = 0; i < (int)workers.size(); i++) {
     workers[i]->join();
+    delete(workers[i]);
   }
   delete(q);
 }
