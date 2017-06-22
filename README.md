@@ -49,13 +49,14 @@ finally we get
 # system requirements(only linux tested)
 
 Currently `toy-graph` supports single machine vertex in memory & pull
-computation, memory cost is each_vertex_cost * num_of_vertex. There is no disk
-space needed except result file.
+computation, one thread to read, multi threads to compute, memory cost is
+each_vertex_cost * num_of_vertex. There is no disk space needed except result
+file.
 
 # performance
 
 1. we use [valgrind](http://valgrind.org/docs/manual/quick-start.html) to do
-meomry check, such as memory leak, we use [gtest](https://github.com/google/googletest)
+memory check, such as memory leak, we use [gtest](https://github.com/google/googletest)
 to do unit test).
 
 2. In order to reduce memory cost, all vertexes are stored on a continuous memory
@@ -66,7 +67,7 @@ We leave each vertex memory management to user themselves.
 
 # road map
 
-1. support multi-thread computation(partition edges).
+1. speed optimization and experiment results.
 2. support push computation model.
 3. add more unit test, add code comments, add docs.
 4. support multi platforms.
