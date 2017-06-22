@@ -8,18 +8,20 @@ ThreadPool::ThreadPool(int workerNum, int queueSize) {
   }
   isStop = false;
   q = new FixedSizeQueue<std::function<void()>>(queueSize);
-  workers = std::vector<ThreadInterface*>(workerNum,
-      new SimpleThread(Worker(*this)));
+  workers = std::vector<ThreadInterface*>(workerNum);
+  for (int i = 0; i < workerNum; i++) {
+    workers[i] = new SimpleThread(Worker(*this));
+  }
 }
 
 ThreadPool::~ThreadPool() {
-  if (isStop == false) {
-    isStop = true;
-  }
   q->stop();
   for (int i = 0; i < (int)workers.size(); i++) {
     workers[i]->join();
     delete(workers[i]);
+  }
+  if (isStop == false) {
+    isStop = true;
   }
   delete(q);
 }
@@ -29,12 +31,19 @@ void ThreadPool::enQueue(std::function<void()> f) {
 }
 
 void ThreadPool::start() {
+  LOG(util::INFO) << "try to start " << workers.size() << " workers.";
   for (int i = 0; i < (int)workers.size(); i++) {
     workers[i]->start();
+    LOG(util::INFO) << "worker " << i << " started.";
   }
+  LOG(util::INFO) << "all workers started.";
 }
 
 void ThreadPool::stop() {
+  q->stop();
+  for (int i = 0; i < (int)workers.size(); i++) {
+    workers[i]->join();
+  }
   isStop = true;
 }
 
@@ -47,7 +56,7 @@ void Worker::operator()() {
       break;
     }
     if(!pool.q->pop(task)) {
-      pool.stop();
+      pool.isStop = true;
       break;
     }
     task();

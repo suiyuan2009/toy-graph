@@ -83,7 +83,7 @@ SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
   graph = gbuild->build(vertexNum, edgeNum, oneVertexSize, true);
   reader = new framework::AsyncReader<EdgeT>(inputFile, oneEdgeSize);
   writer = new framework::SimpleWriter(outputFile);
-  pool = new lib::ThreadPool(1);
+  pool = new lib::ThreadPool(10);
 };
 
 template <class MessageT, class EdgeT, class VertexT>
