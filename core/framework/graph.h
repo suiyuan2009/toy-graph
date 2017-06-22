@@ -3,6 +3,7 @@
 
 #include <mutex>
 #include <string>
+#include <vector>
 
 #include "core/framework/message.h"
 #include "core/framework/vertex.h"
