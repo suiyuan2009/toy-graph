@@ -36,10 +36,18 @@ bool SimpleReader::readInToEdge(EdgeInterface* edge) {
   return true;
 }
 
-bool SimpleReader::readInToEdge(std::vector<EdgeInterface*>&, int&) {
-  LOG(util::ERROR) <<
-      "readInToEdge(std::vector<EdgeInterface*>, int&) is not implemented!";
-  return false;
+bool SimpleReader::readInToEdge(std::vector<EdgeInterface*>& edges, int& num) {
+  int size = edges.size();
+  if (size == 0) {
+    LOG(util::ERROR)
+        << "edges passed to readInToEdge size must be more than 0.";
+    return false;
+  }
+  num = 0;
+  while (num < size && !readInToEdge(edges[num])) {
+    num++;
+  }
+  return num > 0;
 }
 
 void SimpleReader::reset() {

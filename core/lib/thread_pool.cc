@@ -52,5 +52,4 @@ void Worker::operator()() {
     task();
   }
 }
-
-}
+} // namespace lib
