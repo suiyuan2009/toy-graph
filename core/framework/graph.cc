@@ -24,8 +24,12 @@ GraphInterface::~GraphInterface() {
 }
 
 SimpleGraph::SimpleGraph(platform::int64 vNum, platform::int64 eNum, int ovs,
-    VertexInterface* v) : GraphInterface(vNum, eNum, ovs) {
+    VertexInterface* v, bool _use_locking) : GraphInterface(vNum, eNum, ovs) {
   vertex = v;
+  use_locking = _use_locking;
+  if (use_locking) {
+    mtx = std::vector<std::mutex>(vNum);
+  }
 }
 
 SimpleGraph::~SimpleGraph() {
@@ -33,7 +37,12 @@ SimpleGraph::~SimpleGraph() {
 }
 
 void SimpleGraph::scatter(platform::int64 idx, MessageInterface* msg) {
-  vertex->gather((char*)vertexBuf + idx * oneVertexSize, msg);
+  if (use_locking) {
+    std::unique_lock<std::mutex> ulock(mtx[idx]);
+    vertex->gather((char*)vertexBuf + idx * oneVertexSize, msg);
+  } else {
+    vertex->gather((char*)vertexBuf + idx * oneVertexSize, msg);
+  }
 }
 
 void SimpleGraph::initAllVertex() {

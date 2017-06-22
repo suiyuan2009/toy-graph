@@ -12,7 +12,7 @@ namespace framework {
 class GraphBuilderInterface {
 public:
   virtual GraphInterface* build(platform::int64 vertexNum,
-      platform::int64 edgeNum, int oneVertexSize) = 0;
+      platform::int64 edgeNum, int oneVertexSize, bool use_locking) = 0;
   virtual ~GraphBuilderInterface() {}
 };
 
@@ -20,14 +20,15 @@ template <class VertexT>
 class SimpleGraphBuilder : public GraphBuilderInterface {
 public:
   GraphInterface* build(platform::int64 vertexNum,
-      platform::int64 edgeNum, int oneVertexSize) override;
+      platform::int64 edgeNum, int oneVertexSize, bool use_locking) override;
 };
 
 template <class VertexT>
 GraphInterface* SimpleGraphBuilder<VertexT>::build(platform::int64 vertexNum,
-    platform::int64 edgeNum, int ovs) {
+    platform::int64 edgeNum, int ovs, bool use_locking) {
   VertexInterface* vertex = new VertexT();
-  SimpleGraph* simpleGraph = new SimpleGraph(vertexNum, edgeNum, ovs, vertex);
+  SimpleGraph* simpleGraph = new SimpleGraph(vertexNum, edgeNum, ovs, vertex,
+                                             use_locking);
   return simpleGraph;
 }
 

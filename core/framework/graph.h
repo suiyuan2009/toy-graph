@@ -1,7 +1,9 @@
 #ifndef CORE_FRAMEWORK_GRAPH_H
 #define CORE_FRAMEWORK_GRAPH_H
 
+#include <mutex>
 #include <string>
+#include <vector>
 
 #include "core/framework/message.h"
 #include "core/framework/vertex.h"
@@ -32,7 +34,7 @@ protected:
 class SimpleGraph : public GraphInterface {
 public:
   SimpleGraph(platform::int64 vNum, platform::int64 eNum, int initOneVertex,
-             VertexInterface* v);
+             VertexInterface* v, bool use_locking=false);
   ~SimpleGraph() override;
   void updateAllVertex() override;
   void initAllVertex() override;
@@ -42,7 +44,9 @@ public:
   platform::int64 getVertexNum() override;
   std::string getVertexOutput(platform::int64 idx) override;
 private:
+  bool use_locking;
   VertexInterface* vertex;
+  std::vector<std::mutex> mtx;
 };
 
 }

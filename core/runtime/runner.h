@@ -80,7 +80,7 @@ SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
   LOG(util::INFO)<<"start build graph, vertex num is "<<vertexNum<<
       ", edge num is "<<edgeNum <<", one vertex size is " << oneVertexSize
       << ", one edge size is " << oneEdgeSize;
-  graph = gbuild->build(vertexNum, edgeNum, oneVertexSize);
+  graph = gbuild->build(vertexNum, edgeNum, oneVertexSize, true);
   reader = new framework::AsyncReader<EdgeT>(inputFile, oneEdgeSize);
   writer = new framework::SimpleWriter(outputFile);
   pool = new lib::ThreadPool(1);
@@ -95,8 +95,9 @@ void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
   for (int i = 0; i < bucketSize; i++) {
     edges[i] = new EdgeT();
   }
-  LOG(util::INFO) << "start thread pool.";
+  LOG(util::INFO) << "try to start thread pool.";
   pool->start();
+  LOG(util::INFO) << "thread pool started.";
   for (int i = 1; i <= iteration; i++) {
     LOG(util::INFO) << "reset reader to read data from beginning again.";
     reader->reset();
