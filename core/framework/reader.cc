@@ -7,6 +7,10 @@
 
 namespace framework {
 
+ReaderInterface::ReaderInterface() {
+  isStop = false;
+}
+
 SimpleReader::SimpleReader(std::string filePath, int oes, int bufSize) {
   oneEdgeSize = oes;
   readerBufSize = oes * bufSize;
@@ -23,6 +27,9 @@ SimpleReader::~SimpleReader() {
 }
 
 bool SimpleReader::readInToEdge(EdgeInterface* edge) {
+  if (isStop) {
+    return false;
+  }
   if (offset >= readerBufSize) {
     file->sequentialRead(buf, readerBufSize, bufSize);
     if (bufSize == 0) return false;
@@ -43,8 +50,11 @@ bool SimpleReader::readInToEdge(std::vector<EdgeInterface*>& edges, int& num) {
         << "edges passed to readInToEdge size must be more than 0.";
     return false;
   }
+  if (isStop) {
+    return false;
+  }
   num = 0;
-  while (num < size && !readInToEdge(edges[num])) {
+  while (num < size && readInToEdge(edges[num])) {
     num++;
   }
   return num > 0;
@@ -55,6 +65,11 @@ void SimpleReader::reset() {
   file = new platform::PosixReadFile(filePath);
   offset = readerBufSize;
   bufSize = 0;
+  isStop = false;
+}
+
+void SimpleReader::stop() {
+  isStop = true;
 }
 
 }

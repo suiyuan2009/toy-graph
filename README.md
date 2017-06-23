@@ -67,7 +67,8 @@ We leave each vertex memory management to user themselves.
 
 # road map
 
-1. speed optimization and experiment results.
+1. speed optimization, unit tests and experiment results.
 2. support push computation model.
-3. add more unit test, add code comments, add docs.
+3. add code comments, add docs.
 4. support multi platforms.
+5. support distributed computation.

@@ -82,11 +82,10 @@ bool FixedSizeQueue<T>::pop(T& ret) {
   return true;
 }
 
+// invoke after push finished.
 template <class T>
 void FixedSizeQueue<T>::stop() {
-  std::unique_lock<std::mutex> ulock(qmtx);
   QueueInterface<T>::isStop = true;
-  ulock.unlock();
   not_empty.notify_all();
 }
 

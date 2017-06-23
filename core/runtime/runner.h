@@ -38,24 +38,18 @@ public:
   SimpleRunner(platform::int64 vertexNum, platform::int64 edgeNum,
       std::string inputPath, std::string outputPath, int oneVertexSize,
       int oneEdgeSize, int bucketSize = 10000);
-  ~SimpleRunner();
+  ~SimpleRunner() {}
   void computeThread(std::vector<EdgeT> edges);
 private:
   std::string inputFile;
   std::string outputFile;
   int bucketSize; // for reader
-  lib::ThreadPool* pool;
 };
 
 RunnerInterface::~RunnerInterface() {
   delete(graph);
   delete(reader);
   delete(writer);
-}
-
-template <class MessageT, class EdgeT, class VertexT>
-SimpleRunner<MessageT, EdgeT, VertexT>::~SimpleRunner() {
-  delete(pool);
 }
 
 template <class MessageT, class EdgeT, class VertexT>
@@ -81,9 +75,8 @@ SimpleRunner<MessageT, EdgeT, VertexT>::SimpleRunner(platform::int64 vertexNum,
       ", edge num is "<<edgeNum <<", one vertex size is " << oneVertexSize
       << ", one edge size is " << oneEdgeSize;
   graph = gbuild->build(vertexNum, edgeNum, oneVertexSize, true);
-  reader = new framework::AsyncReader<EdgeT>(inputFile, oneEdgeSize);
+  reader = new framework::SimpleReader(inputFile, oneEdgeSize);
   writer = new framework::SimpleWriter(outputFile);
-  pool = new lib::ThreadPool(10);
 };
 
 template <class MessageT, class EdgeT, class VertexT>
@@ -95,15 +88,16 @@ void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
   for (int i = 0; i < bucketSize; i++) {
     edges[i] = new EdgeT();
   }
-  LOG(util::INFO) << "try to start thread pool.";
-  pool->start();
-  LOG(util::INFO) << "thread pool started.";
   for (int i = 1; i <= iteration; i++) {
     LOG(util::INFO) << "reset reader to read data from beginning again.";
     reader->reset();
     LOG(util::DEBUG) << "reader finished reset.";
     reader->start();
     LOG(util::DEBUG) << "reader starts!";
+    LOG(util::INFO) << "try to start thread pool.";
+    lib::ThreadPool* pool = new lib::ThreadPool(10);
+    pool->start();
+    LOG(util::INFO) << "thread pool started.";
     LOG(util::INFO)<<"start iteration: "<<i;
     platform::int64 edgeNumDEBUG = 0, percentCount = 0;
     platform::int64 percent = graph->getEdgeNum() / 100;
@@ -127,8 +121,15 @@ void SimpleRunner<MessageT, EdgeT, VertexT>::run(int iteration) {
                           << edgeNumDEBUG * 100.0 / graph->getEdgeNum()
                           << " edges";
       }
+      /*
+      if (edgeNumDEBUG > 100000) {
+        reader->stop();
+        break;
+      }
+      */
     }
     pool->stop();
+    delete(pool);
     LOG(util::INFO)<<"finished edge process, " << edgeNumDEBUG <<
         " edges processed.";
     LOG(util::INFO)<<"start updating each vertex";

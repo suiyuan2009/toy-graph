@@ -16,10 +16,13 @@ public:
   virtual bool readInToEdge(std::vector<EdgeInterface*>& edges, int& size) = 0;
   virtual void reset() = 0;
   virtual void start() = 0;
+  virtual void stop() = 0;
   virtual ~ReaderInterface() {};
-  ReaderInterface(){}
+  ReaderInterface();
   ReaderInterface(const ReaderInterface& r) = delete;
   ReaderInterface& operator=(const ReaderInterface& r) = delete;
+protected:
+  bool isStop;
 };
 
 class SimpleReader : public ReaderInterface {
@@ -31,6 +34,7 @@ public:
       int& size) override;
   virtual void reset() override;
   virtual void start() override {}
+  virtual void stop() override;
 protected:
   platform::FileInterface* file;
   void* buf;

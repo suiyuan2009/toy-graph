@@ -20,6 +20,7 @@ public:
   bool readInToEdge(std::vector<EdgeInterface*>& edges, int& size) override;
   void reset() override;
   void start() override;
+  void stop() override;
   void readerThread();
 private:
   int queueSize, bucketSize;
@@ -52,6 +53,10 @@ void AsyncReader<T>::readerThread() {
   T edge;
   lib::Bucket<T> bkt(bucketSize);
   while (1) {
+    if (isStop) {
+      q->stop();
+      return;
+    }
     if (offset >= readerBufSize) {
       file->sequentialRead(buf, readerBufSize, bufSize);
       if (bufSize == 0) {
@@ -113,11 +118,18 @@ void AsyncReader<T>::reset() {
       lib::Bucket<T>(bucketSize));
   reader = new lib::SimpleThread(
       std::bind(&AsyncReader<T>::readerThread, this));
+  isStop = false;
 }
 
 template <class T>
 void AsyncReader<T>::start() {
   reader->start();
+}
+
+template <class T>
+void AsyncReader<T>::stop() {
+  isStop = true;
+  reader->join();
 }
 
 }
