@@ -1,7 +1,9 @@
 # introduction
 
 `toy-graph` is a purely c++ CPU based multithreading graph computing system
-aiming to support billions vertexes.
+aiming to support billions vertexes. It's originally developed for computing
+pagerank for [infomall web pages dataset](http://www.infomall.cn/). Thanks to
+[Dr. Ma](https://github.com/xysmlx)'s guidance.
 
 # quick start
 
@@ -48,7 +50,7 @@ finally we get
 
 # system requirements(only linux tested)
 
-Currently `toy-graph` supports single machine vertex in memory & pull
+Currently `toy-graph` supports single machine & vertex in memory & pull
 computation, one thread to read, multi threads to compute, memory cost is
 each_vertex_cost * num_of_vertex. There is no disk space needed except result
 file.
