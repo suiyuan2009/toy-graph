@@ -1,17 +1,18 @@
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-  name = "framework",
-  deps = ["async_reader",
-          "edge",
-          "vertex",
-          "reader",
-          "writer",
-          "graph",
-          "graph_builder",
-          "message",
-          ],
+name = "framework",
+deps = ["async_reader",
+        "edge",
+        "vertex",
+        "reader",
+        "simple_reader",
+        "writer",
+        "graph",
+        "graph_builder",
+        "message"],
 )
+
 
 cc_library(
   name = "message",
@@ -33,23 +34,25 @@ cc_library(
 cc_library(
   name = "reader",
   hdrs = ["reader.h"],
-  srcs = ["reader.cc"],
-  deps = [":edge",
-          ":vertex",
-          "//core/platform:types",
+  deps = ["//core/lib:bucket"],
+)
+
+cc_library(
+  name = "simple_reader",
+  hdrs = ["simple_reader.h"],
+  deps = [":reader",
           "//core/platform:file",
-          "//core/util:logging",
-          ],
+          "//core/platform:malloc",
+          "//core/util:logging"],
 )
 
 cc_library(
   name = "async_reader",
   hdrs = ["async_reader.h"],
   linkopts = ["-lpthread"],
-  deps = [":reader",
+  deps = [":simple_reader",
           "//core/lib:queue",
-          "//core/lib:thread",
-          "//core/lib:bucket"],
+          "//core/lib:thread"],
 )
 
 cc_library(

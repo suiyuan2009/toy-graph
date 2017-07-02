@@ -19,6 +19,7 @@ public:
   bool empty();
   void clear();
   int size();
+  void setSize(int size);
 private:
   std::vector<T> buf;
   int bucketSize, itemNum;
@@ -66,6 +67,11 @@ int Bucket<T>::size() {
 template <class T>
 T& Bucket<T>::operator[](int idx) {
   return buf[idx];
+}
+
+template <class T>
+void Bucket<T>::setSize(int size) {
+  itemNum = size;
 }
 
 }

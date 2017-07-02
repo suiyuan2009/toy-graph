@@ -3,42 +3,37 @@
 
 #include <vector>
 
-#include "core/framework/reader.h"
-#include "core/lib/bucket.h"
+#include "core/framework/simple_reader.h"
 #include "core/lib/queue.h"
 #include "core/lib/thread.h"
-#include "core/util/logging.h"
 
 namespace framework {
 
 template <class T>
-class AsyncReader : public SimpleReader {
+class AsyncReader : public SimpleReader<T> {
 public:
   AsyncReader(std::string filePath, int oneEdgeSize, int bufSize = 100,
-      int queueSize = 10, int bucketSize = 10000);
+      int queueSize = 30, int bucketSize = 10000);
   ~AsyncReader() override;
-  bool readInToEdge(std::vector<EdgeInterface*>& edges, int& size) override;
+  bool readInToEdge(lib::Bucket<T>*& edges, int bucketSize) override;
   void reset() override;
   void start() override;
   void stop() override;
   void readerThread();
 private:
   int queueSize, bucketSize;
-  lib::QueueInterface<lib::Bucket<T>>* q;
+  lib::QueueInterface<lib::Bucket<T>*>* q;
   lib::ThreadInterface* reader;
-  lib::Bucket<T> tmpBucket;
 };
 
 template <class T>
 AsyncReader<T>::AsyncReader(std::string filePath, int oneEdgeSize, int bufSize,
-    int qs, int bs) : SimpleReader(filePath, oneEdgeSize, bufSize) {
+    int qs, int bs) : SimpleReader<T>(filePath, oneEdgeSize, bufSize) {
   queueSize = qs;
   bucketSize = bs;
-  q = new lib::FixedSizeQueue<lib::Bucket<T>>(queueSize,
-      lib::Bucket<T>(bucketSize));
+  q = new lib::FixedSizeQueue<lib::Bucket<T>*>(queueSize, nullptr);
   reader = new lib::SimpleThread(
       std::bind(&AsyncReader<T>::readerThread, this));
-  tmpBucket = lib::Bucket<T>(bucketSize);
 }
 
 template <class T>
@@ -50,61 +45,32 @@ AsyncReader<T>::~AsyncReader() {
 
 template <class T>
 void AsyncReader<T>::readerThread() {
-  T edge;
-  lib::Bucket<T> bkt(bucketSize);
   while (1) {
-    if (isStop) {
+    if (ReaderInterface<T>::isStop) {
       q->stop();
       return;
     }
-    if (offset >= readerBufSize) {
-      file->sequentialRead(buf, readerBufSize, bufSize);
-      if (bufSize == 0) {
-        if (!bkt.empty()) {
-          q->push(bkt);
-          bkt.clear();
-        }
-        q->stop();
-        return;
-      }
-      offset = 0;
-    } else {
-      if (offset + oneEdgeSize > bufSize) {
-        if (!bkt.empty()) {
-          q->push(bkt);
-          bkt.clear();
-        }
-        q->stop();
-        return;
-      }
-      edge.read((char*)buf + offset);
-      bkt.push(edge);
-      if (bkt.full()) {
-        q->push(bkt);
-        bkt.clear();
-      }
-      offset += oneEdgeSize;
+    lib::Bucket<T>* bkt = nullptr;
+    if(!SimpleReader<T>::readInToEdge(bkt, bucketSize)) {
+      delete(bkt);
+      q->stop();
+      return;
     }
+    q->push(bkt);
   }
 }
 
 template <class T>
-bool AsyncReader<T>::readInToEdge(std::vector<EdgeInterface*>& edges,
-    int& num) {
-  if (!q->pop(tmpBucket)) {
+bool AsyncReader<T>::readInToEdge(lib::Bucket<T>*& edges, int bktSize) {
+  if (bktSize != bucketSize) {
+    LOG(util::ERROR) << "bucketSize must be equal to constructor's bucketSize";
+  }
+  if (!q->pop(edges)) {
     return false;
   }
-  if (tmpBucket.empty()) {
+  if (edges->empty()) {
     return false;
   }
-  if (edges.size() < bucketSize) {
-    LOG(util::ERROR) <<
-      "vector passed to readInToEdge 's size must not be less than bucketSize.";
-  }
-  for (int i = 0; i < tmpBucket.size(); i++) {
-    (*(T*)edges[i]) = tmpBucket[i];
-  }
-  num = tmpBucket.size();
   return true;
 }
 
@@ -113,12 +79,11 @@ void AsyncReader<T>::reset() {
   reader->join();
   delete(q);
   delete(reader);
-  SimpleReader::reset();
-  q = new lib::FixedSizeQueue<lib::Bucket<T>>(queueSize,
-      lib::Bucket<T>(bucketSize));
+  SimpleReader<T>::reset();
+  q = new lib::FixedSizeQueue<lib::Bucket<T>*>(queueSize, nullptr);
   reader = new lib::SimpleThread(
       std::bind(&AsyncReader<T>::readerThread, this));
-  isStop = false;
+  ReaderInterface<T>::isStop = false;
 }
 
 template <class T>
@@ -128,7 +93,7 @@ void AsyncReader<T>::start() {
 
 template <class T>
 void AsyncReader<T>::stop() {
-  isStop = true;
+  ReaderInterface<T>::isStop = true;
   reader->join();
 }
 
